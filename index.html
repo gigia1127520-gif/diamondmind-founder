@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.14.5 · Original DiamondMind UI · Backend V21.0.0 -->
-  <meta name="diamondmind-version" content="18.14.5-founder">
+  <!-- DiamondMind Founder Console V18.14.6 · Original DiamondMind UI · Backend V21.0.5 -->
+  <meta name="diamondmind-version" content="18.14.6-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="21.0.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -1472,7 +1472,9 @@
           <label>玩法<select id="modelMarket"><option value="all">全部玩法</option><option value="moneyline">獨贏</option><option value="run_line">讓分</option><option value="totals">大小分</option><option value="two_leg">二關</option><option value="three_leg">三關</option></select></label>
           <label>來源<select id="modelSource"><option value="all">全部來源</option><option value="public">免費精選</option><option value="pro">Pro 推薦</option></select></label>
           <button type="button" class="btn ghost" id="modelRefresh">重新整理</button>
+          <button type="button" class="btn ghost" id="modelBackfill">同步歷史快照</button>
           <button type="button" class="btn primary" id="modelExportPerformance">匯出績效 CSV</button>
+          <div class="model-calibration-note" id="modelSyncStatus" style="grid-column:1/-1;margin-top:0">模型績效只讀取已完成的快照；歷史同步會在背景執行，不會再卡住整個頁面。</div>
         </div>
         <div class="model-summary-grid">
           <div class="card model-summary-card"><small>全部快照</small><b id="modelTotal">—</b></div>
@@ -4242,17 +4244,45 @@
       state.modelLoading=true;const refresh=document.getElementById("modelRefresh");if(refresh)refresh.disabled=true;
       const range=document.getElementById("modelRange")?.value||"30d";const market=document.getElementById("modelMarket")?.value||"all";const source=document.getElementById("modelSource")?.value||"all";
       const params=new URLSearchParams({range,market,source_type:source});
+      const syncNote=document.getElementById("modelSyncStatus");if(syncNote)syncNote.textContent="正在讀取模型績效…";
       try{
-        const [performance,snapshots]=await Promise.all([
-          billingRequest(`/admin/model/performance?${params}`,{timeout:30000}),
-          billingRequest(`/admin/model/snapshots?${params}&include_test=true&limit=250`,{timeout:30000})
+        const results=await Promise.allSettled([
+          billingRequest(`/admin/model/performance?${params}`,{timeout:60000}),
+          billingRequest(`/admin/model/snapshots?${params}&include_test=true&limit=250`,{timeout:60000})
         ]);
+        const performance=results[0].status==="fulfilled"?results[0].value:null;
+        const snapshots=results[1].status==="fulfilled"?results[1].value:{items:[]};
+        if(!performance){throw results[0].reason||new Error("模型績效載入失敗")}
         renderModelPerformance(performance,snapshots);
+        const backfill=performance?.backfill||{};
+        if(syncNote){
+          syncNote.textContent=backfill.running
+            ?"歷史快照正在背景同步。你可以先查看目前已完成的績效，稍後再按重新整理。"
+            :`模型績效已載入。歷史同步：免費 ${Number(backfill.public||0)} 筆、Pro ${Number(backfill.packages||0)} 筆。`;
+        }
+        if(results[1].status!=="fulfilled"&&syncNote){syncNote.textContent+=" 最近快照清單暫時無法載入，但統計數字仍可使用。"}
       }catch(error){
-        document.getElementById("modelMarketBreakdown").innerHTML=`<div class="settlement-empty">${escapeHtml(error.message||"模型績效載入失敗")}</div>`;
+        const message=error?.name==="AbortError"?"模型績效讀取逾時；請先按「同步歷史快照」，等背景完成後再重新整理。":(error.message||"模型績效載入失敗");
+        document.getElementById("modelMarketBreakdown").innerHTML=`<div class="settlement-empty">${escapeHtml(message)}</div>`;
         document.getElementById("modelLeagueBreakdown").innerHTML='<div class="settlement-empty">聯盟績效暫時無法載入。</div>';
-        document.getElementById("modelConfidenceBreakdown").innerHTML='<div class="settlement-empty">請確認已執行模型績效 SQL。</div>';
+        document.getElementById("modelConfidenceBreakdown").innerHTML='<div class="settlement-empty">若顯示資料表未建立，請重新執行 V21 模型 SQL。</div>';
+        if(syncNote)syncNote.textContent=message;
       }finally{state.modelLoading=false;if(refresh)refresh.disabled=false}
+    }
+    async function runModelBackfill(){
+      if(!isAdminMember())return;
+      const button=document.getElementById("modelBackfill"),note=document.getElementById("modelSyncStatus");
+      if(button)button.disabled=true;if(note)note.textContent="正在啟動歷史快照背景同步…";
+      try{
+        const payload=await billingRequest("/admin/model/backfill/run",{method:"POST",timeout:30000});
+        if(note)note.textContent=payload.message||"歷史快照已在背景同步。";
+        showToast("歷史快照已開始背景同步");
+        state.modelPerformance=null;state.modelSnapshots=null;
+        window.setTimeout(()=>loadModelPerformance(true),5000);
+      }catch(error){
+        const message=error?.name==="AbortError"?"啟動同步逾時，請稍後再試。":(error.message||"歷史快照同步啟動失敗");
+        if(note)note.textContent=message;showToast(message);
+      }finally{if(button)button.disabled=false}
     }
     function useSuggestedModelWeights(){
       const weights=state.modelSuggestedWeights||{};Object.entries(weights).forEach(([key,value])=>{const input=document.getElementById(`modelWeight_${key}`);if(input)input.value=Number(value).toFixed(3)});showToast("已將建議權重填入輸入框，尚未正式套用");
@@ -4498,6 +4528,7 @@
     document.getElementById("settlementRefresh")?.addEventListener("click",()=>{state.settlementDashboard=null;loadSettlementDashboard(true,false)});
     document.getElementById("settlementRun")?.addEventListener("click",()=>loadSettlementDashboard(true,true));
     document.getElementById("modelRefresh")?.addEventListener("click",()=>{state.modelPerformance=null;state.modelSnapshots=null;loadModelPerformance(true)});
+    document.getElementById("modelBackfill")?.addEventListener("click",runModelBackfill);
     document.getElementById("modelRange")?.addEventListener("change",()=>{state.modelPerformance=null;loadModelPerformance(true)});
     document.getElementById("modelMarket")?.addEventListener("change",()=>{state.modelPerformance=null;loadModelPerformance(true)});
     document.getElementById("modelSource")?.addEventListener("change",()=>{state.modelPerformance=null;loadModelPerformance(true)});
