@@ -1,0 +1,9 @@
+{
+  "name": "DiamondMind Founder Console",
+  "short_name": "DM Founder",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#03080c",
+  "theme_color": "#03080c",
+  "lang": "zh-Hant"
+}
