@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.14.6 · Original DiamondMind UI · Backend V21.0.5 -->
-  <meta name="diamondmind-version" content="18.14.6-founder">
+  <!-- DiamondMind Founder Console V18.14.7 · Original DiamondMind UI · Backend V21.0.6 -->
+  <meta name="diamondmind-version" content="18.14.7-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="21.0.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -1558,7 +1558,8 @@
           <div class="card operations-card"><small>API 版本</small><b id="operationsVersion">—</b><span>後端目前部署版本</span></div>
           <div class="card operations-card"><small>付款環境</small><b id="operationsPayment">—</b><span id="operationsPaymentMeta">—</span></div>
           <div class="card operations-card"><small>Supabase</small><b id="operationsDatabase">—</b><span>推薦、會員與模型資料</span></div>
-          <div class="card operations-card"><small>四聯盟真實盤口</small><b id="operationsOdds">—</b><span>MLB、NPB、KBO、CPBL 獨贏、讓分、大小分與市場優勢來源</span></div>
+          <div class="card operations-card"><small>四聯盟真實盤口</small><b id="operationsOdds">—</b><span>MLB、NPB、KBO、CPBL 獨贏、讓分、大小分真實來源</span></div>
+          <div class="card operations-card"><small>Odds-API.io 免費額度</small><b id="operationsOddsQuota">—</b><span id="operationsOddsQuotaMeta">本服務請求安全計數</span></div>
           <div class="card operations-card"><small>安全排程</small><b id="operationsScheduler">—</b><span>自動更新與結算觸發</span></div>
           <div class="card operations-card"><small>客服管道</small><b id="operationsSupport">—</b><span>正式收費前需完成</span></div>
         </div>
@@ -4333,6 +4334,17 @@
       document.getElementById("operationsPaymentMeta").textContent=services.billing?`ECPay · ${services.billing_mode||"—"}`:"付款服務設定不完整";
       const db=document.getElementById("operationsDatabase");db.textContent=services.records_database?"已連線":"未設定";db.className=services.records_database?"pass":"fail";
       const odds=document.getElementById("operationsOdds");odds.textContent=services.odds_feed?"已設定":"未設定";odds.className=services.odds_feed?"pass":"warning";
+      const oddsIo=services.odds_api_io_status||{},quota=oddsIo.quota||{},dailyQuota=quota.daily||{},hourlyQuota=quota.hourly||{};
+      const quotaValue=document.getElementById("operationsOddsQuota"),quotaMeta=document.getElementById("operationsOddsQuotaMeta");
+      if(quotaValue){
+        if(!oddsIo.configured){quotaValue.textContent="未設定";quotaValue.className="warning";if(quotaMeta)quotaMeta.textContent="尚未設定 ODDS_API_IO_KEY"}
+        else{
+          const used=Number(dailyQuota.used||0),limit=Number(dailyQuota.limit||500),remaining=Math.max(0,Number(dailyQuota.remaining??(limit-used))),stateName=String(quota.state||"normal");
+          quotaValue.textContent=`${used} / ${limit}`;
+          quotaValue.className=stateName==="normal"?"pass":stateName==="blocked"?"fail":"warning";
+          if(quotaMeta)quotaMeta.textContent=`剩餘 ${remaining} · 本小時 ${Number(hourlyQuota.used||0)} / ${Number(hourlyQuota.limit||100)} · 保留給自動發布 ${Number(dailyQuota.reserved_for_automatic_checks||0)} 次`;
+        }
+      }
       const scheduler=document.getElementById("operationsScheduler");scheduler.textContent=services.scheduler?"已設定":"未設定";scheduler.className=services.scheduler?"pass":"warning";
       const support=document.getElementById("operationsSupport");support.textContent=services.support_email||"尚未設定";support.className=services.support_email?"pass":"warning";
       const checks=payload?.checks||[];
