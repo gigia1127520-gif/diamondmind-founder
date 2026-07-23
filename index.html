@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.14.8 · Original DiamondMind UI · Backend V21.0.7 -->
-  <meta name="diamondmind-version" content="18.14.8-founder">
+  <!-- DiamondMind Founder Console V18.14.9 · Original DiamondMind UI · Backend V21.0.8 -->
+  <meta name="diamondmind-version" content="18.14.9-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="21.0.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -3203,8 +3203,7 @@
         state.marketRecords=isProMember()&&Array.isArray(payload.market_packages)
           ?payload.market_packages.filter(bundle=>{
             const date=String(bundle?.date||"");
-            const mode=String(bundle?.publication?.mode||"");
-            return (!date||date<=taiwanToday())&&mode!=="ai_auto";
+            return !date||date<=taiwanToday();
           })
           :[];
         state.proPerformance=isAdminMember()&&payload.pro_performance?payload.pro_performance:null;
@@ -4166,6 +4165,15 @@
       const copy=[label,localizeMatchup(item?.matchup),selectionScheduleLabel(item),item?.detailed_status,item?.result_note].filter(Boolean).join(" · ");
       return `<article class="settlement-row"><div class="settlement-row-main"><b>${escapeHtml(title)}${escapeHtml(settlementScore(item))}</b><span>${escapeHtml(copy||"等待官方賽果")}</span></div><span class="settlement-pill ${escapeHtml(status)}">${escapeHtml(settlementStatusLabel(status))}</span></article>`;
     }
+    function settlementMonitorDisplay(monitor={}){
+      const scheduler=String(monitor.scheduler||"");
+      const stateName=String(monitor.state||"");
+      if(monitor.last_error||stateName==="error")return {label:"發生錯誤",className:"error"};
+      if(monitor.running===true||stateName==="running"||stateName==="queued")return {label:"執行中",className:"running"};
+      if(monitor.enabled===false||scheduler==="disabled_no_database"||stateName==="disabled")return {label:"已停止",className:"stopped"};
+      if(monitor.last_run||scheduler==="internal_fallback"||scheduler==="external_only")return {label:"正常待命",className:"idle"};
+      return {label:"等待首次檢查",className:"idle"};
+    }
     function renderSettlementDashboard(payload){
       state.settlementDashboard=payload;const summary=payload?.summary||{};
       document.getElementById("settlementTotal").textContent=summary.total??0;document.getElementById("settlementPending").textContent=summary.pending??0;document.getElementById("settlementSettled").textContent=summary.settled??0;document.getElementById("settlementNeutral").textContent=(Number(summary.push||0)+Number(summary.void||0));
@@ -4175,7 +4183,7 @@
       const packageData=payload?.package;const packageList=document.getElementById("settlementPackageList");const packageBadge=document.getElementById("settlementPackageBadge");
       if(!packageData){packageBadge.textContent="尚未發布";packageList.innerHTML='<div class="settlement-empty">此日期尚未發布 Pro 推薦。</div>'}
       else{const rows=[];Object.entries(packageData.groups||{}).forEach(([group,items])=>(items||[]).forEach(item=>rows.push(settlementRow(item,settlementGroupLabels[group]||group))));packageBadge.textContent=packageData.settled?"全部已結算":`${packageData.summary?.pending||0} 項等待`;packageList.innerHTML=rows.join("")||'<div class="settlement-empty">已建立推薦包，但沒有玩法項目。</div>'}
-      const monitor=payload?.monitor||{};const last=monitor.last_run?formatAdminDateTime(monitor.last_run):"尚未執行";const errors=(payload?.errors||[]).length;document.getElementById("settlementMonitorNote").innerHTML=`<b>自動結算監控：${monitor.running===false?"已停止":"運作中"}</b><br>最後檢查：${escapeHtml(last)} · 本次免費結算 ${Number(monitor.free_settled_now||0)} 筆 · Pro 結算 ${Number(monitor.packages_settled_now||0)} 包${errors?` · ${errors} 場賽事暫時無法讀取`:""}`;
+      const monitor=payload?.monitor||{};const monitorDisplay=settlementMonitorDisplay(monitor);const last=monitor.last_run?formatAdminDateTime(monitor.last_run):"尚未執行";const errors=(payload?.errors||[]).length;document.getElementById("settlementMonitorNote").innerHTML=`<b>自動結算監控：${monitorDisplay.label}</b><br>最後檢查：${escapeHtml(last)} · 本次免費結算 ${Number(monitor.free_settled_now||0)} 筆 · Pro 結算 ${Number(monitor.packages_settled_now||0)} 包${errors?` · ${errors} 場賽事暫時無法讀取`:""}`;
     }
     async function loadSettlementDashboard(force=false,runNow=false){
       if(!isAdminMember()||state.settlementLoading)return;const dateInput=document.getElementById("settlementDate");if(!dateInput.value)dateInput.value=state.settlementDate||taiwanToday();const target=dateInput.value;
@@ -4351,7 +4359,7 @@
       document.getElementById("operationsChecklist").innerHTML=checks.length?checks.map(item=>`<div class="operations-check ${operationsClass(item.status)}"><span class="operations-check-icon">${item.status==="pass"?"✓":item.status==="fail"?"!":"•"}</span><div><b>${escapeHtml(item.label||item.key||"檢查項目")} · ${operationsStatusLabel(item.status)}</b><p>${escapeHtml(item.detail||"")}</p></div></div>`).join(""):'<div class="admin-empty">沒有檢查項目。</div>';
       document.getElementById("operationsPregame").textContent=pregame.running===false?"已停止":pregame.last_error?"發生錯誤":"執行中";
       document.getElementById("operationsPregameLast").textContent=formatAdminDateTime(pregame.last_run)||"尚無紀錄";
-      document.getElementById("operationsSettlement").textContent=settlement.running===false?"已停止":settlement.last_error?"發生錯誤":"執行中";
+      document.getElementById("operationsSettlement").textContent=settlementMonitorDisplay(settlement).label;
       document.getElementById("operationsSettlementLast").textContent=formatAdminDateTime(settlement.last_run)||"尚無紀錄";
       const errors=[...(payload?.monitor_errors||[])];const errorBox=document.getElementById("operationsErrors");
       errorBox.hidden=!errors.length;errorBox.textContent=errors.length?`監控錯誤：${errors.join(" / ")}`:"";
