@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.15.0 · Original DiamondMind UI · Backend V21.1.0 -->
-  <meta name="diamondmind-version" content="18.15.0-founder">
+  <!-- DiamondMind Founder Console V18.15.1 · Original DiamondMind UI · Backend V21.1.0 -->
+  <meta name="diamondmind-version" content="18.15.1-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="21.0.0">
+  <meta name="diamondmind-backend-target" content="22.1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1564,6 +1564,15 @@
           <div class="card operations-card"><small>客服管道</small><b id="operationsSupport">—</b><span>正式收費前需完成</span></div>
         </div>
         <div class="operations-layout">
+          <section class="card operations-panel"><h2>API 監控中心</h2><p>顯示 MLB Pro 真實盤口、API 金鑰設定與最近一次抓取結果；不會顯示任何金鑰內容。</p>
+            <div class="operations-monitor">
+              <div class="operations-monitor-row"><small>The Odds API</small><b id="apiMonitorOddsConfigured">檢查中</b></div>
+              <div class="operations-monitor-row"><small>MLB 最近抓盤</small><b id="apiMonitorMlbLast">—</b></div>
+              <div class="operations-monitor-row"><small>MLB 盤口覆蓋</small><b id="apiMonitorMlbCoverage">—</b></div>
+              <div class="operations-monitor-row"><small>MLB API 配額</small><b id="apiMonitorMlbQuota">—</b></div>
+            </div>
+            <div class="operations-error" id="apiMonitorError" hidden></div>
+          </section>
           <section class="card operations-panel"><h2>上線檢查清單</h2><p>系統會依正式環境設定、推薦紀錄與結算結果自動檢查。</p><div class="operations-checklist" id="operationsChecklist"><div class="admin-empty">載入檢查項目中…</div></div></section>
           <section class="card operations-panel"><h2>背景監控狀態</h2><p>顯示 Render 執行中的開賽前更新與自動結算監控。</p>
             <div class="operations-monitor">
@@ -4364,11 +4373,32 @@
       const errors=[...(payload?.monitor_errors||[])];const errorBox=document.getElementById("operationsErrors");
       errorBox.hidden=!errors.length;errorBox.textContent=errors.length?`監控錯誤：${errors.join(" / ")}`:"";
     }
+    function renderApiMonitor(payload){
+      const odds=payload?.services?.the_odds_api||{};
+      const mlb=(odds.last_checks||{}).MLB||{};
+      const configured=document.getElementById("apiMonitorOddsConfigured");
+      if(configured){configured.textContent=odds.configured?"已設定":"未設定";configured.className=odds.configured?"pass":"fail"}
+      const last=document.getElementById("apiMonitorMlbLast");
+      if(last)last.textContent=mlb.checked_at?`${formatAdminDateTime(mlb.checked_at)} · ${mlb.last_error?"失敗":"成功"}`:"尚無抓取紀錄";
+      const coverage=mlb.coverage||{};
+      const coverageNode=document.getElementById("apiMonitorMlbCoverage");
+      if(coverageNode)coverageNode.textContent=`獨贏 ${Number(coverage.moneyline||0)} · 讓分 ${Number(coverage.run_line||0)} · 大小 ${Number(coverage.totals||0)}`;
+      const quota=mlb.quota||{};
+      const quotaNode=document.getElementById("apiMonitorMlbQuota");
+      if(quotaNode)quotaNode.textContent=quota.remaining==null?"供應商未回傳":`剩餘 ${quota.remaining} · 已用 ${quota.used??"—"}`;
+      const error=document.getElementById("apiMonitorError");
+      if(error){error.hidden=!mlb.last_error;error.textContent=mlb.last_error?`MLB 抓盤錯誤：${mlb.last_error}；連續失敗 ${Number(mlb.consecutive_failures||0)} 次。`:""}
+    }
+    async function loadApiMonitor(){
+      try{const payload=await billingRequest("/admin/api-monitor",{timeout:30000});renderApiMonitor(payload)}
+      catch(error){const box=document.getElementById("apiMonitorError");if(box){box.hidden=false;box.textContent=error.message||"API 監控暫時無法載入"}}
+    }
+
     async function loadOperationsStatus(force=false){
       if(state.operationsLoading)return;
       if(state.operationsStatus&&!force){renderOperationsStatus(state.operationsStatus);return}
       state.operationsLoading=true;
-      try{const payload=await billingRequest("/admin/operations/status",{timeout:30000});renderOperationsStatus(payload)}
+      try{const [payload]=await Promise.all([billingRequest("/admin/operations/status",{timeout:30000}),loadApiMonitor()]);renderOperationsStatus(payload)}
       catch(error){showToast(error.message||"營運狀態載入失敗");const box=document.getElementById("operationsErrors");if(box){box.hidden=false;box.textContent=error.message||"營運狀態載入失敗"}}
       finally{state.operationsLoading=false}
     }
