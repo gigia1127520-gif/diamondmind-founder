@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.14.9 · Original DiamondMind UI · Backend V21.0.8 -->
-  <meta name="diamondmind-version" content="18.14.9-founder">
+  <!-- DiamondMind Founder Console V18.15.0 · Original DiamondMind UI · Backend V21.1.0 -->
+  <meta name="diamondmind-version" content="18.15.0-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="21.0.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -4914,6 +4914,21 @@
       return `<div class="founder-market-subhead ${isWatchlist?"watch":""}">${isWatchlist?"PRO 觀察名單｜勾選後會以創辦人指定發布":"正式候選"}</div><div class="founder-market-options">${options}</div>`;
     }
 
+    function founderCandidateDiagnosticsHtml(payload){
+      const diagnostics=payload?.diagnostics||{};
+      const labels={schedule:"官方賽程",odds:"真實盤口",model:"模型分析",recommendations:"正式候選"};
+      const statusLabel=value=>value==="ok"?"正常":value==="waiting"?"等待中":value==="unavailable"?"暫不可用":"尚未確認";
+      const rows=Object.entries(labels).map(([key,label])=>{
+        const item=diagnostics[key]||{};
+        const count=item.count==null?"":` · ${Number(item.count)||0}`;
+        return `<div class="founder-readiness-game"><b>${escapeHtml(label)}</b><span>${escapeHtml(statusLabel(item.status))}${escapeHtml(count)}</span></div>`;
+      }).join("");
+      return `<section class="founder-market-readiness waiting">
+        <div class="founder-market-readiness-head"><div><h4>AI 診斷</h4><p>${escapeHtml(payload?.message||"候選服務暫時等待資料。")}</p></div><span class="founder-market-readiness-state">${payload?.retryable===false?"需要設定":"可重新嘗試"}</span></div>
+        <div class="founder-readiness-games">${rows}</div>
+      </section>`;
+    }
+
     function renderFounderMarketCandidates(payload){
       const status=document.getElementById("founderMarketStatus");
       const container=document.getElementById("founderMarketCandidates");
@@ -4922,6 +4937,14 @@
       if(!status||!container)return;
       state.founderMarketBundle=payload;
       status.textContent=payload.message||"正式候選與創辦人觀察名單已載入。";
+      if(payload.available===false){
+        container.innerHTML=founderCandidateDiagnosticsHtml(payload)+`<div class="founder-lock"><b>目前未建立正式會員玩法候選</b><br>${escapeHtml(payload.message||"資料尚未就緒，請稍後重新載入。")}<br><small>推薦紀錄、自動發布與自動結算不受這次候選載入失敗影響。</small></div>`;
+        if(publish)publish.disabled=true;
+        if(aiButton)aiButton.disabled=true;
+        const count=document.getElementById("founderMarketSelectedCount");
+        if(count)count.textContent="候選資料尚未就緒";
+        return;
+      }
       if(payload.locked){
         const packageData=payload.package||{};
         const counts={
@@ -5008,8 +5031,12 @@
       }catch(error){
         state.founderMarketDate="";
         state.founderMarketBundle=null;
-        status.textContent=error.message||"付費推薦候選暫時無法載入，請確認盤口 API 後重試。";
-        container.innerHTML='<div class="founder-lock">目前無法建立正式會員玩法候選。</div>';
+        const raw=String(error?.message||"");
+        const friendly=raw.includes("502")||raw.includes("Bad Gateway")
+          ?"後端服務剛啟動或上游資料暫時逾時；系統未建立錯誤候選，請稍後重新載入。"
+          :raw||"付費推薦候選暫時無法載入，請稍後重試。";
+        status.textContent=friendly;
+        container.innerHTML=`<section class="founder-market-readiness waiting"><div class="founder-market-readiness-head"><div><h4>AI 診斷</h4><p>${escapeHtml(friendly)}</p></div><span class="founder-market-readiness-state">可重新嘗試</span></div><div class="founder-readiness-metrics"><span>官方賽程 尚未確認</span><span>真實盤口 尚未確認</span><span>模型分析 已隔離</span><span>正式候選 0</span></div></section><div class="founder-lock">候選載入失敗不會影響既有推薦、紀錄或自動結算。</div>`;
       }finally{
         state.founderMarketsLoading=false;
         updateFounderMarketSelectionCount();
