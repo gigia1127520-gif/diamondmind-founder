@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.16.2 · Weight TEST Challenger · Backend V22.2.3 -->
-  <meta name="diamondmind-version" content="18.16.2-founder">
+  <!-- DiamondMind Founder Console V18.17.0 · Smart Publishing Center · Backend V22.3.0 -->
+  <meta name="diamondmind-version" content="18.17.0-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.2.3">
+  <meta name="diamondmind-backend-target" content="22.3.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -838,6 +838,27 @@
       line-height:1.7;
     }
     .founder-publish-notice b{color:var(--green)}
+    .smart-publish-console{
+      padding:24px;
+      border-color:rgba(55,244,164,.34);
+      background:
+        radial-gradient(circle at 92% 4%,rgba(55,244,164,.12),transparent 36%),
+        linear-gradient(155deg,rgba(10,31,37,.98),rgba(5,16,22,.99));
+    }
+    .smart-publish-toolbar{display:grid;grid-template-columns:160px 180px auto;gap:10px;align-items:center;margin:18px 0}
+    .smart-publish-toolbar input,.smart-publish-toolbar select{width:100%}
+    .smart-publish-advice{padding:14px 16px;border:1px solid rgba(55,244,164,.17);border-radius:14px;color:#c7d8de;background:rgba(55,244,164,.045);font-size:11px;line-height:1.65}
+    .smart-publish-advice b{color:var(--green)}
+    .smart-channel-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:14px}
+    .smart-channel-card{display:grid;gap:12px;padding:17px;border:1px solid rgba(255,255,255,.07);border-radius:17px;background:rgba(255,255,255,.022)}
+    .smart-channel-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .smart-channel-head b{font-size:17px}.smart-channel-head span{padding:6px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:9px;font-weight:900}
+    .smart-channel-head span.ready{color:var(--green);border-color:rgba(55,244,164,.32)}
+    .smart-channel-head span.waiting{color:var(--gold);border-color:rgba(255,215,106,.28)}
+    .smart-channel-card p{min-height:38px;margin:0;color:var(--muted);font-size:10px;line-height:1.6}
+    .smart-channel-card small{color:#718893;font-size:9px;line-height:1.5}
+    .smart-runtime{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px;padding:11px 13px;border:1px solid rgba(255,255,255,.055);border-radius:13px;color:var(--muted);font-size:9px}
+    .smart-runtime b{color:#c8d6db}
     .founder-quick-links{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
@@ -869,6 +890,7 @@
       .founder-gate-actions{flex-direction:column}
       .founder-gate-actions .btn{width:100%}
       .founder-quick-links{grid-template-columns:1fr}
+      .smart-publish-console{padding:19px}.smart-publish-toolbar,.smart-channel-grid{grid-template-columns:1fr}.smart-publish-toolbar .btn,.smart-channel-card .btn{width:100%}.smart-runtime{align-items:flex-start;flex-direction:column}
       body[data-site-mode="founder"] .page-space{padding-bottom:210px}
     }
   </style>
@@ -1178,6 +1200,34 @@
               </div>
             </aside>
           </div>
+
+          <section class="card founder-console smart-publish-console" data-auth-admin hidden aria-labelledby="smartPublishTitle">
+            <div class="founder-console-head">
+              <div><div class="kicker">SMART PUBLISHING CENTER</div><h2 id="smartPublishTitle">智慧發布中心</h2><p>AI 只提供建議；Free 與 Pro 使用不同資料通道，必須分開載入、分開確認、分開發布。</p></div>
+              <span class="micro-pill">V22.3</span>
+            </div>
+            <div class="smart-publish-toolbar">
+              <input type="date" id="smartPublishDate" aria-label="智慧發布日期">
+              <select id="smartPublishLeague" aria-label="智慧發布聯盟"><option value="MLB">MLB 美棒</option><option value="NPB">NPB 日棒</option><option value="KBO">KBO 韓棒</option><option value="CPBL">CPBL 中職</option></select>
+              <button type="button" class="btn ghost small" id="smartPublishRefresh">重新檢查發布狀態</button>
+            </div>
+            <div class="smart-publish-advice" id="smartPublishAdvice"><b>正在準備</b><br>登入後會讀取 Free、Pro 與自動發布狀態。</div>
+            <div class="smart-channel-grid">
+              <article class="smart-channel-card">
+                <div class="smart-channel-head"><b>FREE 公開通道</b><span id="smartFreeState" class="waiting">等待檢查</span></div>
+                <p id="smartFreeAdvice">只允許一場獨贏精選，正式發布後寫入公開紀錄並永久鎖定。</p>
+                <small>資料庫：recommendations · 可見範圍：免費會員</small>
+                <button type="button" class="btn ghost small" id="smartLoadFree">載入 Free AI 建議</button>
+              </article>
+              <article class="smart-channel-card">
+                <div class="smart-channel-head"><b>PRO 會員通道</b><span id="smartProState" class="waiting">等待檢查</span></div>
+                <p id="smartProAdvice">只接受正式候選與真實盤口，未授權會員由後端直接阻擋。</p>
+                <small>資料庫：prediction_packages · 可見範圍：Pro／創辦人</small>
+                <button type="button" class="btn ghost small" id="smartLoadPro">載入 Pro AI 建議</button>
+              </article>
+            </div>
+            <div class="smart-runtime"><span id="smartPublishAutomatic">自動流程狀態尚未載入。</span><b id="smartPublishRuntime">背景發布：等待檢查</b></div>
+          </section>
 
           <section class="card founder-console" data-auth-admin hidden aria-labelledby="founderPredictionTitle">
             <div class="founder-console-head">
@@ -1972,8 +2022,9 @@
     const state = {
       games:[],gameFilter:"all",gamesLoaded:false,activeLeague:"MLB",predictionDate:"",predictionRole:"",predictionLeague:"MLB",
       records:[],marketRecords:[],proPerformance:null,recordStats:null,recordFilter:"all",marketRecordFilter:"all",recordLeagueFilter:"all",recordsLoaded:false,recordsLoading:false,recordsError:"",recordsAccessRole:"",
-      founderCandidateDate:"",founderCandidateLeague:"MLB",founderCandidatesLoading:false,
+      founderCandidateDate:"",founderCandidateLeague:"MLB",founderCandidatesLoading:false,founderFreeBundle:null,
       founderMarketDate:"",founderMarketLeague:"MLB",founderMarketsLoading:false,founderMarketBundle:null,
+      publishingStatusDate:"",publishingStatusLeague:"MLB",publishingStatusLoading:false,publishingStatus:null,
       upgradeReturnGame:null,billingConfig:null,billingStatus:null,selectedPlan:null,paymentHandled:false,
       paymentSuccessTimer:null,paymentSuccessInterval:null,
       adminTab:"members",adminMembers:null,adminTransactions:null,adminMembersOffset:0,adminTransactionsOffset:0,adminPageSize:30,adminSelectedMember:null,adminSelectedTransaction:null,adminPendingAction:null,adminLoading:false,
@@ -2127,7 +2178,7 @@
         renderPredictionAccess();
         if(isSignedIn()){
           loadTopPrediction(true);
-          if(isAdminMember()){loadFounderCandidates();loadFounderMarkets();}
+          if(isAdminMember()){loadSmartPublishingStatus();loadFounderCandidates();loadFounderMarkets();}
         }
       }
       if(pageId==="recordsPage"&&(!state.recordsLoaded||state.recordsAccessRole!==authState.role)) loadRecords(true);
@@ -2673,7 +2724,7 @@
       if(document.getElementById("recordsPage")?.classList.contains("active")&&state.recordsAccessRole!==authState.role)loadRecords(true);
       if(signedIn&&document.getElementById("predictionPage")?.classList.contains("active")){
         loadTopPrediction();
-        if(isAdminMember()){loadFounderCandidates();loadFounderMarkets();}
+        if(isAdminMember()){loadSmartPublishingStatus();loadFounderCandidates();loadFounderMarkets();}
       }
     }
     function clearAuthSession(){
@@ -2688,8 +2739,11 @@
       state.recordsLoaded=false;
       state.recordsAccessRole="";
       state.founderCandidateDate="";
+      state.founderFreeBundle=null;
       state.founderMarketDate="";
       state.founderMarketBundle=null;
+      state.publishingStatusDate="";
+      state.publishingStatus=null;
       state.adminMembers=null;state.adminTransactions=null;state.adminSelectedMember=null;state.adminMembersOffset=0;state.adminTransactionsOffset=0;
       state.homeAnnouncementRole="";state.announcementLoginChecked="";state.announcementModalItem=null;
       saveAuthSession(null);
@@ -4795,10 +4849,134 @@
       return fallback;
     }
 
+    function syncPublishingFilters(date,league){
+      const value=date||taiwanToday();
+      const code=String(league||"MLB").toUpperCase();
+      ["smartPublishDate","founderPredictionDate","founderMarketDate"].forEach(id=>{
+        const input=document.getElementById(id);
+        if(input)input.value=value;
+      });
+      ["smartPublishLeague","founderPredictionLeague","founderMarketLeague"].forEach(id=>{
+        const input=document.getElementById(id);
+        if(input)input.value=code;
+      });
+      state.founderCandidateLeague=code;
+      state.founderMarketLeague=code;
+      state.publishingStatusLeague=code;
+    }
+
+    function smartChannelState(element,locked,label){
+      if(!element)return;
+      element.textContent=label;
+      element.classList.toggle("ready",Boolean(locked));
+      element.classList.toggle("waiting",!locked);
+    }
+
+    function renderSmartPublishingStatus(payload=state.publishingStatus){
+      const advice=document.getElementById("smartPublishAdvice");
+      const freeText=document.getElementById("smartFreeAdvice");
+      const proText=document.getElementById("smartProAdvice");
+      const freeState=document.getElementById("smartFreeState");
+      const proState=document.getElementById("smartProState");
+      const automatic=document.getElementById("smartPublishAutomatic");
+      const runtime=document.getElementById("smartPublishRuntime");
+      const freeButton=document.getElementById("smartLoadFree");
+      const proButton=document.getElementById("smartLoadPro");
+      if(!advice||!freeText||!proText)return;
+      if(!payload){
+        advice.innerHTML="<b>尚未檢查</b><br>請重新檢查發布狀態。";
+        smartChannelState(freeState,false,"等待檢查");
+        smartChannelState(proState,false,"等待檢查");
+        return;
+      }
+      const code=String(payload.league||"MLB").toUpperCase();
+      const free=payload.channels?.free||{};
+      const pro=payload.channels?.pro||{};
+      const plan=payload.plan||{};
+      const freeBundle=state.founderFreeBundle;
+      const freeBundleMatches=freeBundle&&String(freeBundle.date||"")===String(payload.date||"")&&String(freeBundle.league||freeBundle.requested_league||"").toUpperCase()===code;
+      const freeSuggestion=freeBundleMatches?(freeBundle.items||[]).find(item=>item.can_publish):null;
+      const proBundle=state.founderMarketBundle;
+      const proBundleMatches=proBundle&&String(proBundle.date||"")===String(payload.date||"")&&String(proBundle.league||proBundle.selected_league||"").toUpperCase()===code;
+      const recommended=proBundleMatches?(proBundle.recommended||{}):{};
+      const proSuggestedCount=Object.values(recommended).reduce((sum,items)=>sum+(Array.isArray(items)?items.length:0),0);
+      advice.innerHTML=`<b>${escapeHtml(code)} AI 發布建議</b><br>${escapeHtml(plan.advice||"Free 與 Pro 必須分開確認。")}`;
+      smartChannelState(freeState,free.locked,free.locked?"已發布鎖定":freeSuggestion?"AI 建議已就緒":"尚未發布");
+      smartChannelState(proState,pro.locked,pro.locked?"已發布鎖定":proSuggestedCount?"AI 建議已就緒":"尚未發布");
+      if(free.locked){
+        const selected=free.selection||{};
+        freeText.textContent=`已鎖定：${localizeMatchup(selected.matchup||"免費精選")} · ${localizePickLabel(selected.pick||"—")}。不會被自動流程覆蓋。`;
+      }else if(freeSuggestion){
+        freeText.textContent=`AI 首選：${localizeMatchup(freeSuggestion.matchup||"—")} · ${localizePickLabel(freeSuggestion.pick?.label||"—",freeSuggestion)} · 信心 ${Number(freeSuggestion.confidence||0).toFixed(1)}%。`;
+      }else{
+        freeText.textContent=`${code} Free 尚未鎖定；載入後會把最高信心且仍未開賽的有效獨贏候選排在最前面。`;
+      }
+      if(pro.locked){
+        proText.textContent=`已鎖定 ${Number(pro.selection_count||0)} 項 Pro 玩法；只有 Pro／創辦人帳號能由後端取得完整內容。`;
+      }else if(proSuggestedCount){
+        proText.textContent=`AI 建議已選出 ${proSuggestedCount} 項玩法；仍須在 Pro 區單獨確認，絕不與 Free 一鍵合併發布。`;
+      }else{
+        proText.textContent=`${code} Pro 尚未鎖定；載入後只會建議具備有效方向與真實盤口的正式候選。`;
+      }
+      if(automatic){
+        const optimization=payload.model_optimization||{};
+        const modelCopy=optimization.enabled
+          ?`模型每 ${Number(optimization.interval_hours||6).toFixed(optimization.interval_hours%1?1:0)} 小時持續建立 TEST，仍須創辦人 Deploy。`
+          :"模型持續優化目前未啟用。";
+        automatic.textContent=`${payload.automatic?.message||"自動流程狀態尚未載入。"} ${modelCopy}`;
+      }
+      if(runtime){
+        const runtimeState=String(payload.runtime?.state||"idle");
+        const runtimeLabels={idle:"待命",queued:"已排入背景",running:"背景執行中",warning:"完成但需重試",error:"執行失敗",disabled:"未啟用"};
+        runtime.textContent=`背景發布：${runtimeLabels[runtimeState]||runtimeState}`;
+      }
+      if(freeButton){
+        freeButton.disabled=Boolean(free.locked);
+        freeButton.textContent=free.locked?"Free 已鎖定":"載入 Free AI 建議";
+      }
+      if(proButton){
+        proButton.disabled=Boolean(pro.locked);
+        proButton.textContent=pro.locked?"Pro 已鎖定":"載入 Pro AI 建議";
+      }
+    }
+
+    async function loadSmartPublishingStatus(force=false){
+      if(!isAdminMember()||state.publishingStatusLoading)return;
+      const dateInput=document.getElementById("smartPublishDate");
+      const leagueInput=document.getElementById("smartPublishLeague");
+      if(!dateInput||!leagueInput)return;
+      if(!dateInput.value)dateInput.value=taiwanToday();
+      const date=dateInput.value;
+      const league=leagueInput.value||"MLB";
+      syncPublishingFilters(date,league);
+      if(!force&&state.publishingStatus&&state.publishingStatusDate===date&&state.publishingStatusLeague===league){
+        renderSmartPublishingStatus();
+        return;
+      }
+      state.publishingStatusLoading=true;
+      const runtime=document.getElementById("smartPublishRuntime");
+      if(runtime)runtime.textContent="背景發布：正在檢查";
+      try{
+        const payload=await billingRequest(`/admin/publishing/status?date=${encodeURIComponent(date)}&league=${encodeURIComponent(league)}`,{timeout:30000});
+        state.publishingStatus=payload;
+        state.publishingStatusDate=date;
+        state.publishingStatusLeague=league;
+        renderSmartPublishingStatus(payload);
+      }catch(error){
+        state.publishingStatus=null;
+        const advice=document.getElementById("smartPublishAdvice");
+        if(advice)advice.innerHTML=`<b>狀態暫時無法讀取</b><br>${escapeHtml(error.message||"請稍後重新檢查；既有正式資料不受影響。")}`;
+        if(runtime)runtime.textContent="背景發布：狀態讀取失敗";
+      }finally{
+        state.publishingStatusLoading=false;
+      }
+    }
+
     function renderFounderCandidates(payload){
       const status=document.getElementById("founderCandidateStatus");
       const list=document.getElementById("founderCandidates");
       if(!status||!list)return;
+      state.founderFreeBundle=payload;
       status.textContent=payload.message||"候選場次已載入。";
       if(payload.locked){
         const selection=payload.selection||{};
@@ -4825,11 +5003,13 @@
           <div class="pro-metrics">${metrics}</div>
           <p class="pro-summary">${escapeHtml(sourceLabel)} · 已發布鎖定</p>
         </article>`;
+        renderSmartPublishingStatus();
         return;
       }
       const items=payload.items||[];
       if(!items.length){
         list.innerHTML=`<div class="founder-lock">目前沒有尚未開賽的候選場次。</div>`;
+        renderSmartPublishingStatus();
         return;
       }
       list.innerHTML=items.map(item=>{
@@ -4858,6 +5038,7 @@
         const item=items.find(candidate=>String(candidate.game_pk)===String(button.dataset.founderPublish));
         if(item)publishFounderCandidate(item);
       }));
+      renderSmartPublishingStatus();
     }
 
     async function loadFounderCandidates(force=false){
@@ -4891,6 +5072,7 @@
         renderFounderCandidates(payload);
       }catch(error){
         state.founderCandidateDate="";
+        state.founderFreeBundle=null;
         status.textContent=error.status===404?"找不到候選場次。":"創辦人候選場次暫時無法載入，請稍後再試。";
       }finally{
         state.founderCandidatesLoading=false;
@@ -4917,8 +5099,10 @@
         showToast(`${league} 每日免費精選已發布，會員現在可見`);
         state.predictionDate="";
         state.founderCandidateDate="";
+        state.publishingStatusDate="";
         await loadTopPrediction();
         await loadFounderCandidates(true);
+        await loadSmartPublishingStatus(true);
       }catch(error){
         status.textContent=error.message||"發布失敗，請稍後再試。";
         showToast("指定場次未發布");
@@ -4928,11 +5112,19 @@
     document.getElementById("founderLoadCandidates")?.addEventListener("click",()=>loadFounderCandidates(true));
     document.getElementById("founderPredictionDate")?.addEventListener("change",()=>{
       state.founderCandidateDate="";
+      state.founderFreeBundle=null;
+      state.publishingStatusDate="";
+      syncPublishingFilters(document.getElementById("founderPredictionDate")?.value,document.getElementById("founderPredictionLeague")?.value);
+      loadSmartPublishingStatus(true);
       loadFounderCandidates(true);
     });
     document.getElementById("founderPredictionLeague")?.addEventListener("change",event=>{
       state.founderCandidateDate="";
+      state.founderFreeBundle=null;
       state.founderCandidateLeague=event.target.value||"MLB";
+      state.publishingStatusDate="";
+      syncPublishingFilters(document.getElementById("founderPredictionDate")?.value,event.target.value);
+      loadSmartPublishingStatus(true);
       loadFounderCandidates(true);
     });
 
@@ -5158,6 +5350,7 @@
       const aiButton=document.getElementById("founderUseAiMarkets");
       if(!status||!container)return;
       state.founderMarketBundle=payload;
+      renderSmartPublishingStatus();
       status.textContent=payload.message||"正式候選與創辦人觀察名單已載入。";
       if(payload.available===false){
         container.innerHTML=founderCandidateDiagnosticsHtml(payload)+`<div class="founder-lock"><b>目前未建立正式會員玩法候選</b><br>${escapeHtml(payload.message||"資料尚未就緒，請稍後重新載入。")}<br><small>推薦紀錄、自動發布與自動結算不受這次候選載入失敗影響。</small></div>`;
@@ -5301,8 +5494,10 @@
         state.predictionDate="";
         state.founderMarketDate="";
         state.founderMarketBundle=null;
+        state.publishingStatusDate="";
         await loadTopPrediction();
         await loadFounderMarkets(true);
+        await loadSmartPublishingStatus(true);
         await loadRecords(true);
       }catch(error){
         status.textContent=error.message||"付費推薦發布失敗，請稍後再試。";
@@ -5319,13 +5514,48 @@
     document.getElementById("founderMarketDate")?.addEventListener("change",()=>{
       state.founderMarketDate="";
       state.founderMarketBundle=null;
+      state.publishingStatusDate="";
+      syncPublishingFilters(document.getElementById("founderMarketDate")?.value,document.getElementById("founderMarketLeague")?.value);
+      loadSmartPublishingStatus(true);
       loadFounderMarkets(true);
     });
     document.getElementById("founderMarketLeague")?.addEventListener("change",event=>{
       state.founderMarketDate="";
       state.founderMarketLeague=event.target.value||"MLB";
       state.founderMarketBundle=null;
+      state.publishingStatusDate="";
+      syncPublishingFilters(document.getElementById("founderMarketDate")?.value,event.target.value);
+      loadSmartPublishingStatus(true);
       loadFounderMarkets(true);
+    });
+    document.getElementById("smartPublishRefresh")?.addEventListener("click",()=>loadSmartPublishingStatus(true));
+    document.getElementById("smartPublishDate")?.addEventListener("change",event=>{
+      state.publishingStatusDate="";
+      state.founderCandidateDate="";
+      state.founderMarketDate="";
+      state.founderFreeBundle=null;
+      state.founderMarketBundle=null;
+      syncPublishingFilters(event.target.value,document.getElementById("smartPublishLeague")?.value);
+      loadSmartPublishingStatus(true);
+    });
+    document.getElementById("smartPublishLeague")?.addEventListener("change",event=>{
+      state.publishingStatusDate="";
+      state.founderCandidateDate="";
+      state.founderMarketDate="";
+      state.founderFreeBundle=null;
+      state.founderMarketBundle=null;
+      syncPublishingFilters(document.getElementById("smartPublishDate")?.value,event.target.value);
+      loadSmartPublishingStatus(true);
+    });
+    document.getElementById("smartLoadFree")?.addEventListener("click",async()=>{
+      syncPublishingFilters(document.getElementById("smartPublishDate")?.value,document.getElementById("smartPublishLeague")?.value);
+      document.getElementById("founderPredictionTitle")?.scrollIntoView({behavior:"smooth",block:"start"});
+      await loadFounderCandidates(true);
+    });
+    document.getElementById("smartLoadPro")?.addEventListener("click",async()=>{
+      syncPublishingFilters(document.getElementById("smartPublishDate")?.value,document.getElementById("smartPublishLeague")?.value);
+      document.getElementById("founderMarketTitle")?.scrollIntoView({behavior:"smooth",block:"start"});
+      await loadFounderMarkets(true);
     });
 
     let homeLeagueSummaryRequest=0;
@@ -5799,6 +6029,7 @@
     const initialHash=authCallback.handled?"more":location.hash.replace("#","");
     document.getElementById("scheduleDate").value=taiwanToday();
     if(document.getElementById("apiMonitorTestDate"))document.getElementById("apiMonitorTestDate").value=taiwanToday();
+    if(document.getElementById("smartPublishDate"))document.getElementById("smartPublishDate").value=taiwanToday();
     if(document.getElementById("founderPredictionDate"))document.getElementById("founderPredictionDate").value=taiwanToday();
     document.getElementById("founderMarketDate").value=taiwanToday();
     renderRecords();
