@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.16.0 · Model Lifecycle Center · Backend V22.2.0 -->
-  <meta name="diamondmind-version" content="18.16.0-founder">
+  <!-- DiamondMind Founder Console V18.16.1 · Model Lifecycle Deploy Guard · Backend V22.2.1 -->
+  <meta name="diamondmind-version" content="18.16.1-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.2.0">
+  <meta name="diamondmind-backend-target" content="22.2.1">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -4243,16 +4243,16 @@
       state.modelLifecycle=payload;
       const policy=payload.policy||{},status=payload.status||{};
       const policyBox=document.getElementById("modelLifecyclePolicy");
-      if(policyBox)policyBox.textContent=`持續優化 ${policy.continuous_optimization?"運作中":"未啟用"} · 每 ${Math.round(Number(policy.scheduled_interval_seconds||0)/3600)||0} 小時產生 TEST · 自動 Deploy：關閉 · ${status.last_run?`最近執行 ${formatAdminDateTime(status.last_run)}`:"尚無執行紀錄"}`;
+      if(policyBox)policyBox.textContent=`持續優化 ${policy.continuous_optimization?"運作中":"未啟用"} · 每 ${Math.round(Number(policy.scheduled_interval_seconds||0)/3600)||0} 小時產生 TEST · 自動 Deploy：關閉 · ${status.last_run?`最近執行 ${formatAdminDateTime(status.last_run)}`:"尚無執行紀錄"}${status.last_deploy?` · 最近部署 ${formatAdminDateTime(status.last_deploy)}`:""}`;
       const champions=payload.production_profiles||[];
       const championList=document.getElementById("modelChampionList");
       if(championList)championList.innerHTML=champions.length?champions.map(item=>`<article class="model-version-row"><div><b>${escapeHtml(item.version||"Production Champion")}</b><span>${escapeHtml(modelScopeLabel(item.league,item.market))} · 樣本 ${Number(item.sample||0)} · ${escapeHtml(formatAdminDateTime(item.activated_at||item.created_at))}</span></div><div class="model-version-actions"><span class="model-status won">PRODUCTION</span></div></article>`).join(""):'<div class="settlement-empty">目前使用基準模型；累積足夠樣本後會出現正式校準版本。</div>';
-      const latest=payload.latest_test_run||{},candidates=(latest.candidates||[]).filter(item=>item&&item.ready);
+      const latest=payload.latest_test_run||{},promotedScopes=new Set((latest.promoted||[]).filter(Boolean).map(item=>`${String(item.league||"GLOBAL").toUpperCase()}:${String(item.market||"all").toLowerCase()}`)),candidates=(latest.candidates||[]).filter(item=>item&&item.ready);
       const challengerList=document.getElementById("modelChallengerList");
       if(challengerList)challengerList.innerHTML=candidates.length?candidates.map(item=>{
-        const base=item.baseline_metrics||{},next=item.candidate_metrics||{},improvement=item.improvement||{},deployable=Boolean(item.promote);
+        const base=item.baseline_metrics||{},next=item.candidate_metrics||{},improvement=item.improvement||{},scopeKey=`${String(item.league||"GLOBAL").toUpperCase()}:${String(item.market||"all").toLowerCase()}`,deployed=Boolean(item.deployed)||promotedScopes.has(scopeKey),deployable=Boolean(item.promote)&&!deployed;
         const meta=`${modelScopeLabel(item.league,item.market)} · 驗證 ${Number(item.validation_sample||0)} · Brier ${modelMetric(base.brier)} → ${modelMetric(next.brier)} · 改善 ${modelMetric(improvement.brier_delta)}`;
-        return `<article class="model-version-row"><div><b>${escapeHtml(deployable?"驗證通過的 Challenger":"TEST Challenger")}</b><span>${escapeHtml(meta)}</span></div><div class="model-version-actions"><span class="model-status ${deployable?"won":"pending"}">${deployable?"可部署":"繼續觀察"}</span>${deployable?`<button type="button" class="btn primary" data-model-deploy data-run-id="${escapeHtml(latest.id||"")}" data-league="${escapeHtml(item.league||"GLOBAL")}" data-market="${escapeHtml(item.market||"all")}">Deploy</button>`:""}</div></article>`;
+        return `<article class="model-version-row"><div><b>${escapeHtml(deployed?"已部署的 Challenger":deployable?"驗證通過的 Challenger":"TEST Challenger")}</b><span>${escapeHtml(meta)}</span></div><div class="model-version-actions"><span class="model-status ${deployable||deployed?"won":"pending"}">${deployed?"已部署":deployable?"可部署":"繼續觀察"}</span>${deployable?`<button type="button" class="btn primary" data-model-deploy data-run-id="${escapeHtml(latest.id||"")}" data-league="${escapeHtml(item.league||"GLOBAL")}" data-market="${escapeHtml(item.market||"all")}">Deploy</button>`:""}</div></article>`;
       }).join(""):'<div class="settlement-empty">目前沒有達到最低樣本門檻的 Challenger；系統仍會持續累積與測試。</div>';
       const history=payload.history_profiles||[],historyList=document.getElementById("modelVersionHistory");
       if(historyList)historyList.innerHTML=history.length?history.slice(0,40).map(item=>{
