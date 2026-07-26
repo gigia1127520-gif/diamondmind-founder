@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.16.1 · Model Lifecycle Deploy Guard · Backend V22.2.1 -->
-  <meta name="diamondmind-version" content="18.16.1-founder">
+  <!-- DiamondMind Founder Console V18.16.2 · Weight TEST Challenger · Backend V22.2.3 -->
+  <meta name="diamondmind-version" content="18.16.2-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.2.1">
+  <meta name="diamondmind-backend-target" content="22.2.3">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1501,7 +1501,7 @@
           <section class="card model-panel" style="grid-column:1/-1"><h2>模型版本績效</h2><p>各模型版本分開比較命中率、單位盈虧與 ROI，方便判斷是否保留新版。</p><div class="model-breakdown" id="modelVersionBreakdown"><div class="settlement-empty">尚未載入。</div></div></section>
         </div>
         <div class="model-layout" style="margin-top:16px">
-          <section class="card model-panel"><h2>權重校正建議</h2><p id="modelCalibrationMessage">尚未載入校正樣本。</p><div class="model-weight-list" id="modelWeightList"></div><div class="model-calibration-actions"><button type="button" class="btn ghost" id="modelUseSuggested">套用建議到輸入框</button><button type="button" class="btn primary" id="modelApplyWeights">確認啟用新權重</button></div><div class="model-calibration-note">系統只提供建議，不會自動修改模型。樣本不足時仍可查看，但按鈕會保持停用。</div></section>
+          <section class="card model-panel"><h2>權重校正建議</h2><p id="modelCalibrationMessage">尚未載入校正樣本。</p><div class="model-weight-list" id="modelWeightList"></div><div class="model-calibration-actions"><button type="button" class="btn ghost" id="modelUseSuggested">套用建議到輸入框</button><button type="button" class="btn primary" id="modelApplyWeights">建立 TEST 權重候選</button></div><div class="model-calibration-note" id="modelWeightLifecycleStatus">系統只提供建議；新權重會先建立 TEST Challenger，不會直接修改 Production。</div></section>
           <section class="card model-panel"><h2>最近模型快照</h2><p>每筆推薦發布時的信心、完整度、盤口與結果都會保留。</p><div class="model-snapshot-list" id="modelSnapshotList"><div class="settlement-empty">尚未載入。</div></div><div class="model-calibration-actions"><button type="button" class="btn ghost" id="modelExportSnapshots">匯出快照 CSV</button></div></section>
         </div>
         <div class="model-layout" style="margin-top:16px">
@@ -4259,6 +4259,7 @@
         const active=String(item.status||"")==="active";
         return `<article class="model-version-row"><div><b>${escapeHtml(item.version||"歷史校準版本")}</b><span>${escapeHtml(modelScopeLabel(item.league,item.market))} · ${escapeHtml(formatAdminDateTime(item.activated_at||item.created_at))} · ${active?"目前正式":"歷史版本"}</span></div><div class="model-version-actions"><span class="model-status ${active?"won":"pending"}">${active?"PRODUCTION":"HISTORY"}</span>${active?"":`<button type="button" class="btn ghost" data-model-rollback data-profile-id="${escapeHtml(item.id||"")}">一鍵回滾</button>`}</div></article>`;
       }).join(""):'<div class="settlement-empty">尚無模型版本歷史。</div>';
+      renderWeightLifecycle(payload);
     }
     function modelBreakdownRows(items,labels){
       if(!items?.length)return '<div class="settlement-empty">目前尚無已發布快照。</div>';
@@ -4276,6 +4277,24 @@
       const message=document.getElementById("modelCalibrationMessage");if(message)message.textContent=calibration.message||"尚無校正資料。";
       const apply=document.getElementById("modelApplyWeights");if(apply)apply.disabled=!calibration.ready;
       const use=document.getElementById("modelUseSuggested");if(use)use.disabled=!calibration.recommended_weights;
+      renderWeightLifecycle(state.modelLifecycle||{});
+    }
+    function modelWeightSummary(weights={}){
+      return Object.keys(modelModuleLabels).map(key=>`${modelModuleLabels[key]} ${Number(weights?.[key]||0).toFixed(3)}`).join(" · ");
+    }
+    function renderWeightLifecycle(payload={}){
+      const box=document.getElementById("modelWeightLifecycleStatus");if(!box)return;
+      const run=payload.latest_weight_test_run||{},candidate=(run.candidates||[]).find(item=>String(item?.kind||"")==="weight_profile");
+      const activeWeights=payload.production_weight_profile?.weights||state.modelPerformance?.active_weights||state.modelPerformance?.model_runtime_weights||{};
+      const activeLabel=payload.production_weight_profile?"目前 Production 權重":"目前基準 Production 權重";
+      if(!candidate){
+        box.innerHTML=`<b>${escapeHtml(activeLabel)}</b><br>${escapeHtml(modelWeightSummary(activeWeights))}<br><br>尚無 TEST 權重候選；建立候選不會影響會員推薦。`;
+        return;
+      }
+      const deployed=Boolean(candidate.deployed),deployable=Boolean(candidate.ready)&&Boolean(candidate.promote)&&!deployed;
+      const change=Number(candidate.improvement?.absolute_weight_change||0);
+      const status=deployed?"已部署到 Production":deployable?"歷史驗證通過，可由創辦人 Deploy":"TEST 持續觀察";
+      box.innerHTML=`<b>${escapeHtml(activeLabel)}</b><br>${escapeHtml(modelWeightSummary(activeWeights))}<br><br><b>${escapeHtml(candidate.version||"TEST 權重 Challenger")}</b><br>樣本 ${Number(candidate.validation_sample||candidate.sample||0)} · 總調整 ${change.toFixed(3)} · ${escapeHtml(status)}${deployable?`<div class="model-calibration-actions"><button type="button" class="btn primary" data-weight-deploy data-run-id="${escapeHtml(run.id||"")}">Deploy TEST 權重</button></div>`:""}`;
     }
     function renderModelSnapshots(items=[]){
       const list=document.getElementById("modelSnapshotList");if(!list)return;
@@ -4399,11 +4418,21 @@
       const calibration=state.modelPerformance?.calibration||{};if(!calibration.ready){showToast(calibration.message||"樣本數尚未達校正門檻");return}
       const weights={};document.querySelectorAll("[data-model-weight-key]").forEach(input=>weights[input.dataset.modelWeightKey]=Number(input.value||0));
       const sum=Object.values(weights).reduce((total,value)=>total+Number(value||0),0);if(sum<=0){showToast("權重總和必須大於 0");return}
-      if(!window.confirm("確定啟用這組新模型權重嗎？\n\n只影響後續重新計算的賽事，已發布推薦不會更改。"))return;
+      if(!window.confirm("確定建立這組 TEST 權重 Challenger？\n\n這一步不會修改 Production，也不會影響會員推薦。"))return;
       const button=document.getElementById("modelApplyWeights");if(button)button.disabled=true;
-      try{const result=await billingRequest("/admin/model/calibration/apply",{method:"POST",body:{weights,note:"Founder confirmed from model performance dashboard",confirm:true},timeout:30000});showToast(result.message||"模型權重已啟用");state.modelPerformance=null;await loadModelPerformance(true)}
-      catch(error){showToast(error.message||"權重套用失敗")}
+      try{const result=await billingRequest("/admin/model/calibration/apply",{method:"POST",body:{weights,note:"Founder created TEST weights from model performance dashboard",confirm:true},timeout:60000});showToast(result.message||"TEST 權重候選已建立");state.modelPerformance=null;state.modelLifecycle=null;await loadModelPerformance(true)}
+      catch(error){showToast(error.message||"TEST 權重候選建立失敗")}
       finally{if(button)button.disabled=false}
+    }
+    async function deployWeightChallenger(button){
+      const runId=button?.dataset.runId;if(!runId)return;
+      if(!window.confirm("確定將這組 TEST 權重升為 Production？\n\n只影響後續新分析，已發布推薦不會改寫。"))return;
+      button.disabled=true;
+      try{
+        const payload=await billingRequest("/admin/model/calibration/deploy",{method:"POST",body:{run_id:runId,confirm:true},timeout:60000});
+        showToast(payload.message||"TEST 權重已部署到 Production");state.modelPerformance=null;state.modelSnapshots=null;state.modelLifecycle=null;await loadModelPerformance(true);
+      }catch(error){showToast(error.message||"權重部署失敗")}
+      finally{button.disabled=false}
     }
     function updateModelTestSide(){
       const market=document.getElementById("modelTestMarket")?.value||"moneyline";const side=document.getElementById("modelTestSide");const line=document.getElementById("modelTestLine");if(!side||!line)return;
@@ -4746,6 +4775,7 @@
     document.getElementById("modelSource")?.addEventListener("change",()=>{state.modelPerformance=null;loadModelPerformance(true)});
     document.getElementById("modelUseSuggested")?.addEventListener("click",useSuggestedModelWeights);
     document.getElementById("modelApplyWeights")?.addEventListener("click",applyModelWeights);
+    document.getElementById("modelWeightLifecycleStatus")?.addEventListener("click",event=>{const button=event.target.closest("[data-weight-deploy]");if(button)deployWeightChallenger(button)});
     document.getElementById("modelTestMarket")?.addEventListener("change",updateModelTestSide);
     document.getElementById("modelRunTest")?.addEventListener("click",runModelTestSettlement);
     document.getElementById("modelExportSnapshots")?.addEventListener("click",()=>downloadModelCsv("snapshots"));
