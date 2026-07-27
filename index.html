@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.0 · Smart Publishing Center · Backend V22.3.0 -->
-  <meta name="diamondmind-version" content="18.17.0-founder">
+  <!-- DiamondMind Founder Console V18.17.1 · Member Password Security · Backend V22.4.1 -->
+  <meta name="diamondmind-version" content="18.17.1-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="22.3.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -1681,7 +1681,7 @@
             <div class="auth-avatar" aria-hidden="true">DM</div>
             <div class="auth-profile-copy"><div class="kicker">MEMBER ACCOUNT</div><h2 id="memberNickname">DiamondMind 會員</h2><p id="memberEmail">—</p></div>
           </div>
-          <div class="more-actions"><span class="auth-plan-badge" id="memberPlanBadge" data-tier="FREE">免費會員</span><button type="button" class="btn pro" id="memberPlanAction" data-page="membershipPage">升級 Pro</button><button type="button" class="btn ghost" data-auth-logout>登出</button></div>
+          <div class="more-actions"><span class="auth-plan-badge" id="memberPlanBadge" data-tier="FREE">免費會員</span><button type="button" class="btn pro" id="memberPlanAction" data-page="membershipPage">升級 Pro</button><button type="button" class="btn ghost" data-open-password-change>修改密碼</button><button type="button" class="btn ghost" data-auth-logout>登出</button></div>
         </div>
 
         <div class="menu-grid">
@@ -1801,7 +1801,30 @@
       <label>密碼<input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="輸入密碼" minlength="6" required></label>
       <button class="btn primary" id="loginSubmit" type="submit">登入</button>
       <div class="form-note" id="loginNote" role="status" aria-live="polite">使用你註冊時的電子信箱與密碼登入。</div>
+      <p class="auth-switch"><button type="button" data-switch-modal="forgotPasswordModal">忘記密碼？</button></p>
       <p class="auth-switch">還沒有帳號？ <button type="button" data-switch-modal="registerModal">免費註冊</button></p>
+    </form>
+  </section>
+
+  <section class="modal" id="forgotPasswordModal" role="dialog" aria-modal="true" aria-labelledby="forgotPasswordTitle">
+    <div class="modal-head"><div><h2 id="forgotPasswordTitle">忘記密碼</h2><p>寄送安全重設連結到會員信箱</p></div><button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button></div>
+    <form class="form-grid" id="forgotPasswordForm">
+      <label>電子信箱<input id="forgotPasswordEmail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required></label>
+      <button class="btn primary" type="submit">寄送重設連結</button>
+      <div class="form-note" id="forgotPasswordNote" role="status" aria-live="polite">輸入註冊信箱；若帳號存在，系統會寄出重設連結。</div>
+      <p class="auth-switch"><button type="button" data-switch-modal="loginModal">返回登入</button></p>
+    </form>
+  </section>
+
+  <section class="modal" id="changePasswordModal" role="dialog" aria-modal="true" aria-labelledby="changePasswordTitle">
+    <div class="modal-head"><div><h2 id="changePasswordTitle">設定新密碼</h2><p id="changePasswordSubtitle">完成後即可繼續使用 DiamondMind</p></div></div>
+    <form class="form-grid" id="changePasswordForm">
+      <div class="legal-callout" id="changePasswordReason">請設定只有你知道的新密碼。</div>
+      <label>新密碼<input id="changePasswordNew" name="new_password" type="password" autocomplete="new-password" placeholder="至少 8 個字元，包含英文與數字" minlength="8" maxlength="72" required></label>
+      <label>再次輸入新密碼<input id="changePasswordConfirm" name="confirm_password" type="password" autocomplete="new-password" placeholder="再次輸入新密碼" minlength="8" maxlength="72" required></label>
+      <button class="btn primary" type="submit">儲存新密碼</button>
+      <div class="form-note" id="changePasswordNote" role="status" aria-live="polite">密碼不可包含空白，且需同時包含英文字母與數字。</div>
+      <button class="btn ghost" type="button" data-auth-logout>登出並稍後處理</button>
     </form>
   </section>
 
@@ -1810,7 +1833,7 @@
     <form class="form-grid" id="registerForm">
       <label>暱稱<input id="registerNickname" name="nickname" type="text" autocomplete="nickname" placeholder="你的暱稱" minlength="2" maxlength="30" required></label>
       <label>電子信箱<input id="registerEmail" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required></label>
-      <label>設定密碼<input id="registerPassword" name="password" type="password" autocomplete="new-password" placeholder="至少 6 個字元" minlength="6" required></label>
+      <label>設定密碼<input id="registerPassword" name="password" type="password" autocomplete="new-password" placeholder="至少 8 個字元" minlength="8" required></label>
       <button class="btn primary" id="registerSubmit" type="submit">建立免費帳號</button>
       <div class="form-note" id="registerNote" role="status" aria-live="polite">送出後可能需要到信箱完成驗證。</div>
       <p class="auth-switch">已經有帳號？ <button type="button" data-switch-modal="loginModal">直接登入</button></p>
@@ -1951,12 +1974,22 @@
       <div class="admin-detail-box"><small>最後登入</small><b id="adminDetailLastSignIn">—</b></div>
       <div class="admin-detail-box"><small>付款來源</small><b id="adminDetailProvider">—</b></div>
       <div class="admin-detail-box"><small>最近交易編號</small><b id="adminDetailTrade">—</b></div>
+      <div class="admin-detail-box"><small>登入密碼狀態</small><b id="adminDetailPasswordStatus">正常</b></div>
     </div>
     <div class="admin-control-card" id="adminMemberControls">
       <h3>Pro 權限管理</h3><p>新註冊且完成信箱驗證的會員會自動獲得一次 24 小時 Pro。你也能手動贈送短期權限、使用月／季／年方案，或指定自訂到期時間。</p>
       <div class="admin-control-grid"><select id="adminControlPlan"><option value="trial_1d">試用方案 · 1 天</option><option value="gift_3d">短期贈送 · 3 天</option><option value="gift_7d">短期贈送 · 7 天</option><option value="monthly">月方案 · 1 個月</option><option value="quarterly">季方案 · 3 個月</option><option value="annual">年方案 · 12 個月</option><option value="custom">自訂到期時間</option></select><input type="datetime-local" id="adminCustomExpiry" hidden><input type="text" id="adminControlNote" maxlength="300" placeholder="備註（選填，例如新客試用、客服補償）"></div>
       <div class="admin-control-actions"><button type="button" class="btn primary" data-admin-membership-action="grant">開通／重設 Pro</button><button type="button" class="btn ghost" data-admin-membership-action="extend">延長 Pro</button><button type="button" class="btn ghost" data-admin-membership-action="cancel">取消 Pro</button></div>
       <div class="admin-note" id="adminControlNoteStatus"></div>
+    </div>
+    <div class="admin-control-card" id="adminPasswordControls">
+      <h3>登入密碼重置</h3><p>系統會產生一組強密度臨時密碼，只在本次成功畫面顯示。會員用它登入後，必須立即設定自己的新密碼。</p>
+      <div class="admin-control-actions"><button type="button" class="btn ghost" id="adminResetPasswordButton">產生臨時密碼</button></div>
+      <div id="adminTemporaryPasswordResult" hidden>
+        <div class="admin-control-grid"><input id="adminTemporaryPassword" type="text" readonly autocomplete="off" aria-label="會員臨時密碼"><button type="button" class="btn primary" id="adminCopyTemporaryPassword">複製臨時密碼</button></div>
+        <div class="admin-note success">請現在交給會員；關閉視窗後無法再次查看，只能重新產生。</div>
+      </div>
+      <div class="admin-note" id="adminPasswordStatus"></div>
     </div>
     <div class="admin-history"><h3>最近付款紀錄</h3><div class="admin-history-list" id="adminMemberPayments"><div class="admin-empty">尚未載入</div></div></div>
     <div class="admin-history"><h3>人工調整紀錄</h3><div class="admin-history-list" id="adminMemberAudit"><div class="admin-empty">尚未載入</div></div></div>
@@ -2032,7 +2065,7 @@
       settlementDate:"",settlementDashboard:null,settlementLoading:false,
       modelPerformance:null,modelSnapshots:null,modelLoading:false,modelSuggestedWeights:null,operationsStatus:null,operationsLoading:false,apiMonitorTestRunning:false
     };
-    const authState={session:null,user:null,ready:false,role:"free",trialJustGranted:false};
+    const authState={session:null,user:null,ready:false,role:"free",trialJustGranted:false,passwordChangeRequired:false,passwordRecovery:false};
 
     const teamZh = {
       "Arizona Diamondbacks":"亞利桑那響尾蛇","Atlanta Braves":"亞特蘭大勇士","Baltimore Orioles":"巴爾的摩金鶯",
@@ -2223,7 +2256,8 @@
 
     const backdrop = document.getElementById("modalBackdrop");
     function openModal(id){
-      closeModals();
+      if(authState.passwordChangeRequired&&id!=="changePasswordModal")id="changePasswordModal";
+      closeModals(true);
       const modal=document.getElementById(id);
       if(!modal)return;
       backdrop.classList.add("open");
@@ -2236,8 +2270,13 @@
       state.paymentSuccessTimer=null;
       state.paymentSuccessInterval=null;
     }
-    function closeModals(){
+    function closeModals(force=false){
+      if(!force&&authState.passwordChangeRequired&&document.getElementById("changePasswordModal")?.classList.contains("open"))return;
       if(document.getElementById("announcementModal")?.classList.contains("open")&&!state.announcementModalPreview)rememberAnnouncementDismissal(state.announcementModalItem);
+      const temporaryPassword=document.getElementById("adminTemporaryPassword");
+      const temporaryResult=document.getElementById("adminTemporaryPasswordResult");
+      if(temporaryPassword)temporaryPassword.value="";
+      if(temporaryResult)temporaryResult.hidden=true;
       clearPaymentSuccessTimers();
       backdrop.classList.remove("open");
       document.querySelectorAll(".modal.open").forEach(m=>m.classList.remove("open"));
@@ -2616,6 +2655,21 @@
     function isSignedIn(){
       return Boolean(authState.session?.access_token&&authState.user);
     }
+    function memberMustChangePassword(user){
+      return Boolean(user?.app_metadata?.must_change_password);
+    }
+    function showPasswordChangeModal({recovery=false,voluntary=false}={}){
+      authState.passwordRecovery=Boolean(recovery)||authState.passwordRecovery;
+      authState.passwordChangeRequired=!voluntary&&(authState.passwordRecovery||memberMustChangePassword(authState.user));
+      const reason=document.getElementById("changePasswordReason");
+      const subtitle=document.getElementById("changePasswordSubtitle");
+      if(reason)reason.textContent=authState.passwordRecovery?"你已透過信箱重設連結登入，請先建立新密碼。":authState.passwordChangeRequired?"目前使用的是創辦人提供的臨時密碼，必須先改成自己的密碼。":"輸入新密碼即可更新會員帳號。";
+      if(subtitle)subtitle.textContent=authState.passwordChangeRequired?"完成改密碼後才能繼續使用":"更新你的 DiamondMind 登入密碼";
+      document.getElementById("changePasswordForm")?.reset();
+      setAuthNote("changePasswordNote","密碼不可包含空白，且需同時包含英文字母與數字。");
+      openModal("changePasswordModal");
+      window.setTimeout(()=>document.getElementById("changePasswordNew")?.focus(),120);
+    }
     function memberRole(user){
       const role=String(user?.app_metadata?.role||"free").toLowerCase();
       if(role==="admin"||role==="founder")return "admin";
@@ -2706,6 +2760,7 @@
     function renderAuthState(){
       const signedIn=isSignedIn();
       authState.role=signedIn?memberRole(authState.user):"free";
+      authState.passwordChangeRequired=signedIn&&(authState.passwordRecovery||memberMustChangePassword(authState.user));
       document.querySelectorAll("[data-auth-guest]").forEach(element=>element.hidden=signedIn);
       document.querySelectorAll("[data-auth-user]").forEach(element=>element.hidden=!signedIn);
       document.querySelectorAll("[data-auth-admin]").forEach(element=>element.hidden=!isAdminMember());
@@ -2732,6 +2787,8 @@
       authState.user=null;
       authState.role="free";
       authState.trialJustGranted=false;
+      authState.passwordChangeRequired=false;
+      authState.passwordRecovery=false;
       state.predictionDate="";
       state.predictionRole="";
       state.marketRecords=[];
@@ -2771,6 +2828,7 @@
       authState.session=session;
       authState.user=session.user;
       authState.role=memberRole(session.user);
+      authState.passwordChangeRequired=memberMustChangePassword(session.user);
       saveAuthSession(session);
       renderAuthState();
       return session;
@@ -2797,6 +2855,7 @@
       if(value.includes("invalid_credentials")||value.includes("invalid login credentials"))return "電子信箱或密碼不正確。";
       if(value.includes("email_not_confirmed")||value.includes("email not confirmed"))return "請先到信箱完成帳號驗證，再回來登入。";
       if(value.includes("user_already_exists")||value.includes("already registered"))return "此電子信箱已經註冊，請直接登入。";
+      if(value.includes("password"))return "密碼更新失敗，請確認至少 8 個字元並包含英文與數字。";
       if(value.includes("weak_password")||value.includes("password should"))return "密碼強度不足，請至少輸入 6 個字元。";
       if(value.includes("signup_disabled"))return "目前暫停新會員註冊。";
       if(value.includes("rate")||error?.status===429)return "操作過於頻繁，請稍後再試。";
@@ -2910,14 +2969,69 @@
         const payload=await authRequest("/token?grant_type=password",{method:"POST",body:{email,password}});
         await acceptAuthSession(payload);
         form.reset();
-        closeModals();
+        closeModals(true);
         showPage("morePage");
-        showToast(authState.trialJustGranted?"新會員 1 天 Pro 試用已自動開通":`歡迎回來，${memberDisplayName(authState.user)}`);authState.trialJustGranted=false;
-        state.homeAnnouncementRole="";loadHomeAnnouncements(true);window.setTimeout(()=>maybeShowLoginAnnouncement(true),420);
+        if(authState.passwordChangeRequired){
+          showPasswordChangeModal();
+          showToast("請先把臨時密碼改成自己的密碼");
+        }else{
+          showToast(authState.trialJustGranted?"新會員 1 天 Pro 試用已自動開通":`歡迎回來，${memberDisplayName(authState.user)}`);authState.trialJustGranted=false;
+          state.homeAnnouncementRole="";loadHomeAnnouncements(true);window.setTimeout(()=>maybeShowLoginAnnouncement(true),420);
+        }
         setAuthNote("loginNote","使用你註冊時的電子信箱與密碼登入。");
       }catch(error){setAuthNote("loginNote",authErrorMessage(error),"error")}
       finally{setAuthFormBusy(form,false,"登入中…")}
     });
+
+    document.getElementById("forgotPasswordForm").addEventListener("submit",async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const email=document.getElementById("forgotPasswordEmail").value.trim();
+      setAuthNote("forgotPasswordNote","正在寄送安全重設連結…");
+      setAuthFormBusy(form,true,"寄送中…");
+      try{
+        const redirect=`/recover?redirect_to=${encodeURIComponent(AUTH_REDIRECT_URL)}`;
+        await authRequest(redirect,{method:"POST",body:{email}});
+        form.reset();
+        setAuthNote("forgotPasswordNote","若此信箱已註冊，重設連結已寄出；請檢查收件匣與垃圾郵件。","success");
+      }catch(error){
+        const message=error?.status===429?"寄送次數過多，請稍後再試。":authErrorMessage(error);
+        setAuthNote("forgotPasswordNote",message,"error");
+      }finally{setAuthFormBusy(form,false,"寄送中…")}
+    });
+
+    document.getElementById("changePasswordForm").addEventListener("submit",async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const newPassword=document.getElementById("changePasswordNew").value;
+      const confirmation=document.getElementById("changePasswordConfirm").value;
+      if(newPassword!==confirmation){setAuthNote("changePasswordNote","兩次輸入的密碼不一致。","error");return}
+      if(newPassword.length<8||/\s/.test(newPassword)||!/[A-Za-z]/.test(newPassword)||!/\d/.test(newPassword)){
+        setAuthNote("changePasswordNote","新密碼至少 8 個字元、不可有空白，且需包含英文與數字。","error");return;
+      }
+      setAuthNote("changePasswordNote","正在安全更新密碼…");
+      setAuthFormBusy(form,true,"更新中…");
+      try{
+        await billingRequest("/account/change-password",{method:"POST",body:{new_password:newPassword},timeout:30000});
+        authState.passwordRecovery=false;
+        authState.passwordChangeRequired=false;
+        authState.user.app_metadata={...(authState.user?.app_metadata||{}),must_change_password:false,temporary_password_issued_at:null,temporary_password_issued_by:null};
+        authState.session.user=authState.user;
+        saveAuthSession(authState.session);
+        form.reset();
+        closeModals(true);
+        renderAuthState();
+        showPage("morePage");
+        showToast("新密碼已設定完成");
+      }catch(error){setAuthNote("changePasswordNote",error.message||authErrorMessage(error),"error")}
+      finally{setAuthFormBusy(form,false,"更新中…")}
+    });
+
+    document.querySelectorAll("[data-open-password-change]").forEach(button=>button.addEventListener("click",()=>{
+      if(!isSignedIn()){openModal("loginModal");return}
+      authState.passwordRecovery=false;
+      showPasswordChangeModal({voluntary:true});
+    }));
 
     document.getElementById("registerForm").addEventListener("submit",async event=>{
       event.preventDefault();
@@ -2933,7 +3047,7 @@
         if(payload.access_token){
           await acceptAuthSession(payload);
           form.reset();
-          closeModals();
+          closeModals(true);
           showPage("morePage");
           showToast(authState.trialJustGranted?"帳號建立完成，1 天 Pro 試用已開通":`帳號建立完成，歡迎 ${memberDisplayName(authState.user)}`);authState.trialJustGranted=false;
           state.homeAnnouncementRole="";loadHomeAnnouncements(true);window.setTimeout(()=>maybeShowLoginAnnouncement(true),420);
@@ -2953,6 +3067,7 @@
         if(session?.access_token)await authRequest("/logout?scope=local",{method:"POST",accessToken:session.access_token});
       }catch{}finally{
         clearAuthSession();
+        closeModals(true);
         button.disabled=false;
         showToast("已安全登出");
       }
@@ -2963,7 +3078,7 @@
       const hasSession=params.has("access_token");
       const hasError=params.has("error")||params.has("error_description");
       if(!hasSession&&!hasError)return {handled:false};
-      const result={handled:true,error:"",session:null};
+      const result={handled:true,error:"",session:null,type:params.get("type")||""};
       if(hasSession){
         result.session=normalizeSession({
           access_token:params.get("access_token"),refresh_token:params.get("refresh_token"),
@@ -2976,6 +3091,7 @@
     }
     async function initializeAuth(callback){
       try{
+        authState.passwordRecovery=callback?.type==="recovery";
         let session=callback?.session||loadAuthSession();
         if(!session){
           authState.ready=true;
@@ -2990,14 +3106,23 @@
           authState.session=session;
           authState.user=session.user;
           authState.role=memberRole(session.user);
+          authState.passwordChangeRequired=authState.passwordRecovery||memberMustChangePassword(session.user);
           saveAuthSession(session);
           renderAuthState();
         }
-        if(callback?.session)showToast(`信箱驗證完成，歡迎 ${memberDisplayName(authState.user)}`);
+        if(callback?.session&&!authState.passwordRecovery)showToast(`信箱驗證完成，歡迎 ${memberDisplayName(authState.user)}`);
       }catch(error){
         clearAuthSession();
         if(callback?.handled)showToast(authErrorMessage(error));
-      }finally{authState.ready=true;handlePaymentReturn();loadHomeAnnouncements(true);if(isSignedIn())window.setTimeout(()=>maybeShowLoginAnnouncement(false),520)}
+      }finally{
+        authState.ready=true;
+        handlePaymentReturn();
+        loadHomeAnnouncements(true);
+        if(isSignedIn()&&authState.passwordChangeRequired){
+          window.setTimeout(()=>showPasswordChangeModal({recovery:authState.passwordRecovery}),180);
+          if(authState.passwordRecovery)showToast("重設連結已驗證，請建立新密碼");
+        }else if(isSignedIn())window.setTimeout(()=>maybeShowLoginAnnouncement(false),520);
+      }
     }
 
     function escapeHtml(value){
@@ -4768,10 +4893,13 @@
       document.getElementById("adminDetailLastSignIn").textContent=formatAdminDateTime(member.last_sign_in_at);
       document.getElementById("adminDetailProvider").textContent=member.provider||"—";
       document.getElementById("adminDetailTrade").textContent=member.merchant_trade_no||"—";
+      document.getElementById("adminDetailPasswordStatus").textContent=member.must_change_password?"等待會員修改臨時密碼":"正常";
       document.getElementById("adminMemberControls").hidden=member.role==="admin";
+      document.getElementById("adminPasswordControls").hidden=member.role==="admin";
       document.getElementById("adminControlNote").value="";document.getElementById("adminControlPlan").value="trial_1d";document.getElementById("adminCustomExpiry").value="";document.getElementById("adminCustomExpiry").hidden=true;document.getElementById("adminControlNoteStatus").textContent="";
+      document.getElementById("adminTemporaryPassword").value="";document.getElementById("adminTemporaryPasswordResult").hidden=true;document.getElementById("adminPasswordStatus").textContent="";
       const payments=payload?.payments||[];document.getElementById("adminMemberPayments").innerHTML=payments.length?payments.slice(0,8).map(item=>adminHistoryItem(`${item.success?"付款成功":"付款失敗"} · ${adminCurrency(item.amount)}`,`${formatAdminDateTime(item.created_at)} · ${item.merchant_trade_no||"—"} · ${item.rtn_msg||item.event_type||"—"}`)).join(""):'<div class="admin-empty">尚無付款紀錄。</div>';
-      const audit=payload?.admin_events||[];document.getElementById("adminMemberAudit").innerHTML=audit.length?audit.slice(0,8).map(item=>adminHistoryItem(`${({grant:"開通／重設",extend:"延長",cancel:"取消"})[item.action]||item.action} · ${adminPlanLabels[item.plan_code]||"—"}`,`${formatAdminDateTime(item.created_at)} · 操作者 ${item.actor_email||"—"}${item.note?` · ${item.note}`:""}`)).join(""):'<div class="admin-empty">尚無人工調整紀錄。</div>';
+      const audit=payload?.admin_events||[];document.getElementById("adminMemberAudit").innerHTML=audit.length?audit.slice(0,8).map(item=>adminHistoryItem(`${({grant:"開通／重設",extend:"延長",cancel:"取消",password_reset:"重置登入密碼"})[item.action]||item.action} · ${adminPlanLabels[item.plan_code]||"—"}`,`${formatAdminDateTime(item.created_at)} · 操作者 ${item.actor_email||"—"}${item.note?` · ${item.note}`:""}`)).join(""):'<div class="admin-empty">尚無人工調整紀錄。</div>';
     }
     async function openAdminMember(userId){
       if(!isAdminMember())return;openModal("adminMemberModal");document.getElementById("adminMemberModalTitle").textContent="正在載入會員…";
@@ -4803,10 +4931,37 @@
       }catch(error){status.textContent=error.message||"會員權限更新失敗";status.className="admin-note error"}
       finally{submit.disabled=false;cancel.disabled=false}
     }
+    async function resetAdminMemberPassword(){
+      const member=state.adminSelectedMember;
+      if(!member?.id||member.role==="admin")return;
+      if(!confirm(`確定要重置 ${member.email||"此會員"} 的登入密碼？舊密碼會立即失效。`))return;
+      const button=document.getElementById("adminResetPasswordButton");
+      const status=document.getElementById("adminPasswordStatus");
+      button.disabled=true;status.textContent="正在產生安全臨時密碼…";status.className="admin-note";
+      try{
+        const payload=await billingRequest(`/admin/members/${encodeURIComponent(member.id)}/password-reset`,{method:"POST",timeout:30000});
+        const value=String(payload.temporary_password||"");
+        if(!value)throw new Error("後端未回傳臨時密碼");
+        document.getElementById("adminTemporaryPassword").value=value;
+        document.getElementById("adminTemporaryPasswordResult").hidden=false;
+        document.getElementById("adminDetailPasswordStatus").textContent="等待會員修改臨時密碼";
+        member.must_change_password=true;
+        status.textContent="臨時密碼已產生，只會在這次畫面顯示。";status.className="admin-note success";
+        showToast("臨時密碼已產生");
+      }catch(error){status.textContent=error.message||"密碼重置失敗";status.className="admin-note error"}
+      finally{button.disabled=false}
+    }
+    async function copyAdminTemporaryPassword(){
+      const value=document.getElementById("adminTemporaryPassword").value;
+      if(!value)return showToast("目前沒有可複製的臨時密碼");
+      try{await navigator.clipboard.writeText(value);showToast("臨時密碼已複製")}catch{document.getElementById("adminTemporaryPassword").select();showToast("請長按臨時密碼後複製")}
+    }
     document.getElementById("adminControlPlan")?.addEventListener("change",toggleAdminCustomExpiry);
     document.querySelectorAll("[data-admin-membership-action]").forEach(button=>button.addEventListener("click",()=>openAdminMembershipConfirm(button.dataset.adminMembershipAction)));
     document.getElementById("adminConfirmSubmit")?.addEventListener("click",applyAdminMembership);
     document.getElementById("adminConfirmCancel")?.addEventListener("click",()=>{const id=state.adminPendingAction?.memberId;state.adminPendingAction=null;closeModals();if(id)openAdminMember(id)});
+    document.getElementById("adminResetPasswordButton")?.addEventListener("click",resetAdminMemberPassword);
+    document.getElementById("adminCopyTemporaryPassword")?.addEventListener("click",copyAdminTemporaryPassword);
     document.getElementById("adminCopyTransactionNo")?.addEventListener("click",copyAdminTransactionNo);
     document.getElementById("adminMembersExport")?.addEventListener("click",()=>downloadAdminCsv("members"));
     document.getElementById("adminTransactionsExport")?.addEventListener("click",()=>downloadAdminCsv("transactions"));

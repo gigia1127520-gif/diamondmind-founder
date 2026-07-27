@@ -1,4 +1,4 @@
-DiamondMind 創辦人後台 V18.14.5
+DiamondMind 創辦人後台 V18.17.1
 ==============================
 
 建議儲存庫
@@ -21,6 +21,7 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 - 公告管理
 - 模型績效
 - 系統狀態
+- 會員臨時密碼重置與強制改密碼
 
 串接方式
 --------
@@ -43,6 +44,6 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 
 後端
 ----
-使用無 EV 的 V21.0.0；不需要為網站分離新增 SQL。
+使用 DiamondMind Backend V22.4.1；本次密碼安全功能不需新增 SQL。
 兩個 GitHub Pages 儲存庫都位於同一個 github.io origin，
 現有後端 CORS 設定已允許該 origin。
