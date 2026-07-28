@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.1 · Member Password Security · Backend V22.4.1 -->
-  <meta name="diamondmind-version" content="18.17.1-founder">
+  <!-- DiamondMind Founder Console V18.17.2 · Four-League Odds Failover · Backend V22.4.2 -->
+  <meta name="diamondmind-version" content="18.17.2-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.3.0">
+  <meta name="diamondmind-backend-target" content="22.4.2">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1624,7 +1624,7 @@
           <div class="card operations-card"><small>客服管道</small><b id="operationsSupport">—</b><span>正式收費前需完成</span></div>
         </div>
         <div class="operations-layout">
-          <section class="card operations-panel"><h2>API 監控中心</h2><p>顯示 MLB 主／備援真實盤口、有效來源與最近抓取結果；不會顯示任何金鑰內容。</p>
+          <section class="card operations-panel"><h2>API 監控中心</h2><p>顯示四聯盟主／備援真實盤口、有效來源與最近抓取結果；不會顯示任何金鑰內容。</p>
             <div class="operations-monitor">
               <div class="operations-monitor-row"><small>後端版本</small><b id="apiMonitorVersion">—</b></div>
               <div class="operations-monitor-row"><small>Render 執行角色／版本</small><b id="apiMonitorRender">—</b></div>
@@ -5302,13 +5302,21 @@
       const readiness=payload?.readiness?.[league];
       if(!readiness)return "";
       const ready=readiness.status==="ready";
+      const readinessState=String(readiness.status||"");
+      const stateLabel=ready
+        ?"可發布"
+        :readinessState==="odds_quota_exhausted"
+          ?"API 額度不足"
+          :readinessState==="odds_providers_unavailable"
+            ?"盤口來源異常"
+            :"等待資料";
       const coverage=readiness.market_coverage||{};
       const oddsFeed=readiness.odds_feed||{};
       const games=asSelectionArray(readiness.games).filter(item=>asSelectionArray(item.blockers).length).slice(0,6);
       const gameRows=games.map(item=>`<div><b>${escapeHtml(localizeMatchup(item.matchup||`${league} 賽事`))}${item.display_time_taiwan?` · ${escapeHtml(item.display_time_taiwan)}`:""}</b><br>${escapeHtml(asSelectionArray(item.blockers).join("；"))}</div>`).join("");
       const realOdds=Boolean(oddsFeed.fresh_for_model)&&Number(oddsFeed.count||0)>0;
       return `<section class="founder-market-readiness ${ready?"ready":"waiting"}">
-        <div class="founder-market-readiness-head"><div><h4>${escapeHtml(league)} Pro 發布驗證</h4><p>${escapeHtml(readiness.message||"正在驗證推薦方向與真實盤口。")}</p></div><span class="founder-market-readiness-state">${ready?"可發布":"等待資料"}</span></div>
+        <div class="founder-market-readiness-head"><div><h4>${escapeHtml(league)} Pro 發布驗證</h4><p>${escapeHtml(readiness.message||"正在驗證推薦方向與真實盤口。")}</p></div><span class="founder-market-readiness-state">${escapeHtml(stateLabel)}</span></div>
         <div class="founder-readiness-metrics"><span>賽程 ${Number(readiness.schedule_games||0)}</span><span>模型完成 ${Number(readiness.analyzed_games||readiness.full_model_ready_games||0)}</span><span>盤口配對 ${Number(readiness.matched_games||0)}</span><span>獨贏盤 ${Number(coverage.moneyline||0)}</span><span>讓分盤 ${Number(coverage.run_line||0)}</span><span>大小分盤 ${Number(coverage.totals||0)}</span><span>真實盤口 ${realOdds?"已驗證":"未就緒"}</span><span>正式候選 ${Number(readiness.formal_candidates||0)}</span></div>
         ${gameRows?`<div class="founder-readiness-games">${gameRows}</div>`:""}
       </section>`;
@@ -5486,7 +5494,7 @@
     function founderCandidateDiagnosticsHtml(payload){
       const diagnostics=payload?.diagnostics||{};
       const labels={schedule:"官方賽程",odds:"真實盤口",model:"模型分析",recommendations:"正式候選"};
-      const statusLabel=value=>value==="ok"?"正常":value==="waiting"?"等待中":value==="unavailable"?"暫不可用":"尚未確認";
+      const statusLabel=value=>value==="ok"?"正常":value==="waiting"?"等待中":value==="quota_exhausted"?"API 額度不足":value==="unavailable"?"暫不可用":"尚未確認";
       const rows=Object.entries(labels).map(([key,label])=>{
         const item=diagnostics[key]||{};
         const count=item.count==null?"":` · ${Number(item.count)||0}`;

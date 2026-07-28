@@ -1,4 +1,4 @@
-DiamondMind 創辦人後台 V18.17.1
+DiamondMind 創辦人後台 V18.17.2
 ==============================
 
 建議儲存庫
@@ -22,6 +22,8 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 - 模型績效
 - 系統狀態
 - 會員臨時密碼重置與強制改密碼
+- NPB／KBO／CPBL 真實盤口主備援狀態
+- 區分 API 額度用盡、來源異常與盤口尚未提供
 
 串接方式
 --------
@@ -44,6 +46,8 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 
 後端
 ----
-使用 DiamondMind Backend V22.4.1；本次密碼安全功能不需新增 SQL。
+使用 DiamondMind Backend V22.4.2；本次亞洲棒球真實盤口備援不需新增 SQL，
+也不需新增 Render 環境變數。既有 ODDS_API_IO_KEY 會同時供
+MLB、NPB、KBO、CPBL 備援使用。
 兩個 GitHub Pages 儲存庫都位於同一個 github.io origin，
 現有後端 CORS 設定已允許該 origin。
