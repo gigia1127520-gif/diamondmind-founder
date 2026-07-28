@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.2 · Four-League Odds Failover · Backend V22.4.2 -->
-  <meta name="diamondmind-version" content="18.17.2-founder">
+  <!-- DiamondMind Founder Console V18.17.3 · Persistent Odds Snapshots · Backend V22.4.3 -->
+  <meta name="diamondmind-version" content="18.17.3-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.4.2">
+  <meta name="diamondmind-backend-target" content="22.4.3">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1639,7 +1639,7 @@
               <div class="operations-monitor-row"><small>MLB API 配額</small><b id="apiMonitorMlbQuota">—</b></div>
             </div>
             <div class="api-test-panel">
-              <h3>指定聯盟一鍵測試</h3><p>即時檢查官方賽程與真實盤口，會消耗供應商請求額度，但不會發布推薦。</p>
+              <h3>指定聯盟一鍵測試</h3><p>即時檢查官方賽程與真實盤口；冷卻期間會直接讀取永久快照，不會因重複點擊再次消耗供應商額度，也不會發布推薦。</p>
               <div class="api-test-controls">
                 <label>聯盟<select id="apiMonitorTestLeague"><option value="MLB">MLB</option><option value="NPB">NPB</option><option value="KBO">KBO</option><option value="CPBL">CPBL</option></select></label>
                 <label>台灣日期<input type="date" id="apiMonitorTestDate"></label>
@@ -4693,10 +4693,11 @@
         else{
           const schedule=result.schedule||{},odds=result.odds||{},coverage=odds.coverage||{};
           box.classList.add(result.ready?"ready":result.ok?"warning":"fail");
-          const stateLabel=result.ready?"可供模型正式使用":result.ok?"測試完成，但尚未達發布條件":"測試未完整通過";
+          const stateLabel=result.ready?"可供模型正式使用":odds.availability_reason==="stored_snapshot_stale"?"最後盤口已過期，只供查看":result.ok?"測試完成，但尚未達發布條件":"測試未完整通過";
           const fallback=odds.fallback_activated?" · 已啟用備援":"";
+          const snapshot=odds.snapshot_captured_at?` · 最後真實盤口 ${formatAdminDateTime(odds.snapshot_captured_at)}${odds.snapshot_age_minutes==null?"":`（${Math.max(0,Math.round(Number(odds.snapshot_age_minutes)||0))} 分鐘前）`}`:"";
           const problem=schedule.error?.message||odds.error?.message||"";
-          box.textContent=`${result.league||"—"} ${result.date||"—"} · ${stateLabel}。賽程 ${Number(schedule.count||0)} 場（未開賽 ${Number(schedule.upcoming||0)}）· 盤口 ${Number(odds.count||0)} 場 · ${odds.provider||"無有效來源"}${fallback} · 覆蓋 獨贏 ${Number(coverage.moneyline||0)}／讓分 ${Number(coverage.run_line||0)}／大小 ${Number(coverage.totals||0)} · ${Number(result.duration_ms||0)} ms${problem?` · ${problem}`:""}`;
+          box.textContent=`${result.league||"—"} ${result.date||"—"} · ${stateLabel}。賽程 ${Number(schedule.count||0)} 場（未開賽 ${Number(schedule.upcoming||0)}）· 盤口 ${Number(odds.count||0)} 場 · ${odds.provider||"無有效來源"}${fallback}${snapshot} · 覆蓋 獨贏 ${Number(coverage.moneyline||0)}／讓分 ${Number(coverage.run_line||0)}／大小 ${Number(coverage.totals||0)} · ${Number(result.duration_ms||0)} ms${problem?` · ${problem}`:""}`;
         }
       }
       const list=document.getElementById("apiMonitorTestHistory");
@@ -5307,6 +5308,8 @@
         ?"可發布"
         :readinessState==="odds_quota_exhausted"
           ?"API 額度不足"
+          :readinessState==="odds_snapshot_stale"
+            ?"最後盤口已過期"
           :readinessState==="odds_providers_unavailable"
             ?"盤口來源異常"
             :"等待資料";
@@ -5315,9 +5318,13 @@
       const games=asSelectionArray(readiness.games).filter(item=>asSelectionArray(item.blockers).length).slice(0,6);
       const gameRows=games.map(item=>`<div><b>${escapeHtml(localizeMatchup(item.matchup||`${league} 賽事`))}${item.display_time_taiwan?` · ${escapeHtml(item.display_time_taiwan)}`:""}</b><br>${escapeHtml(asSelectionArray(item.blockers).join("；"))}</div>`).join("");
       const realOdds=Boolean(oddsFeed.fresh_for_model)&&Number(oddsFeed.count||0)>0;
+      const oddsProvider=oddsFeed.provider||"尚無有效來源";
+      const oddsCaptured=oddsFeed.snapshot_captured_at?formatAdminDateTime(oddsFeed.snapshot_captured_at):"本次即時抓取";
+      const oddsAge=oddsFeed.snapshot_age_minutes==null?"":` · ${Math.max(0,Math.round(Number(oddsFeed.snapshot_age_minutes)||0))} 分鐘前`;
+      const snapshotLabel=oddsFeed.persistent_snapshot?(realOdds?"永久快照仍在鮮度內":"永久快照僅供查看"):"即時盤口";
       return `<section class="founder-market-readiness ${ready?"ready":"waiting"}">
         <div class="founder-market-readiness-head"><div><h4>${escapeHtml(league)} Pro 發布驗證</h4><p>${escapeHtml(readiness.message||"正在驗證推薦方向與真實盤口。")}</p></div><span class="founder-market-readiness-state">${escapeHtml(stateLabel)}</span></div>
-        <div class="founder-readiness-metrics"><span>賽程 ${Number(readiness.schedule_games||0)}</span><span>模型完成 ${Number(readiness.analyzed_games||readiness.full_model_ready_games||0)}</span><span>盤口配對 ${Number(readiness.matched_games||0)}</span><span>獨贏盤 ${Number(coverage.moneyline||0)}</span><span>讓分盤 ${Number(coverage.run_line||0)}</span><span>大小分盤 ${Number(coverage.totals||0)}</span><span>真實盤口 ${realOdds?"已驗證":"未就緒"}</span><span>正式候選 ${Number(readiness.formal_candidates||0)}</span></div>
+        <div class="founder-readiness-metrics"><span>賽程 ${Number(readiness.schedule_games||0)}</span><span>模型完成 ${Number(readiness.analyzed_games||readiness.full_model_ready_games||0)}</span><span>盤口配對 ${Number(readiness.matched_games||0)}</span><span>獨贏盤 ${Number(coverage.moneyline||0)}</span><span>讓分盤 ${Number(coverage.run_line||0)}</span><span>大小分盤 ${Number(coverage.totals||0)}</span><span>真實盤口 ${realOdds?"已驗證":"未就緒"}</span><span>正式候選 ${Number(readiness.formal_candidates||0)}</span><span>來源 ${escapeHtml(oddsProvider)}</span><span>${escapeHtml(snapshotLabel)} · ${escapeHtml(oddsCaptured)}${escapeHtml(oddsAge)}</span></div>
         ${gameRows?`<div class="founder-readiness-games">${gameRows}</div>`:""}
       </section>`;
     }
@@ -5494,15 +5501,17 @@
     function founderCandidateDiagnosticsHtml(payload){
       const diagnostics=payload?.diagnostics||{};
       const labels={schedule:"官方賽程",odds:"真實盤口",model:"模型分析",recommendations:"正式候選"};
-      const statusLabel=value=>value==="ok"?"正常":value==="waiting"?"等待中":value==="quota_exhausted"?"API 額度不足":value==="unavailable"?"暫不可用":"尚未確認";
+      const statusLabel=value=>value==="ok"?"正常":value==="waiting"?"等待中":value==="snapshot_stale"?"最後盤口已過期":value==="quota_exhausted"?"API 額度不足":value==="unavailable"?"暫不可用":"尚未確認";
       const rows=Object.entries(labels).map(([key,label])=>{
         const item=diagnostics[key]||{};
         const count=item.count==null?"":` · ${Number(item.count)||0}`;
         return `<div class="founder-readiness-game"><b>${escapeHtml(label)}</b><span>${escapeHtml(statusLabel(item.status))}${escapeHtml(count)}</span></div>`;
       }).join("");
+      const odds=diagnostics.odds||{};
+      const snapshot=odds.snapshot_captured_at?`<div class="founder-readiness-game"><b>最後真實盤口</b><span>${escapeHtml(odds.provider||"盤口來源")} · ${escapeHtml(formatAdminDateTime(odds.snapshot_captured_at))}${odds.snapshot_age_minutes==null?"":` · ${Math.max(0,Math.round(Number(odds.snapshot_age_minutes)||0))} 分鐘前`}</span></div>`:"";
       return `<section class="founder-market-readiness waiting">
         <div class="founder-market-readiness-head"><div><h4>AI 診斷</h4><p>${escapeHtml(payload?.message||"候選服務暫時等待資料。")}</p></div><span class="founder-market-readiness-state">${payload?.retryable===false?"需要設定":"可重新嘗試"}</span></div>
-        <div class="founder-readiness-games">${rows}</div>
+        <div class="founder-readiness-games">${rows}${snapshot}</div>
       </section>`;
     }
 
