@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.4 · Split Asian Odds/Publish Windows · Backend V22.4.4 -->
-  <meta name="diamondmind-version" content="18.17.4-founder">
+  <!-- DiamondMind Founder Console V18.17.5 · Founder Pro Records Sync Fix · Backend V22.4.4 -->
+  <meta name="diamondmind-version" content="18.17.5-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="22.4.4">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -2054,7 +2054,7 @@
     const pages = ["homePage","gamesPage","predictionPage","recordsPage","membershipPage","adminMembersPage","adminAnnouncementsPage","adminSettlementPage","adminModelPage","adminOperationsPage","morePage"];
     const state = {
       games:[],gameFilter:"all",gamesLoaded:false,activeLeague:"MLB",predictionDate:"",predictionRole:"",predictionLeague:"MLB",
-      records:[],marketRecords:[],proPerformance:null,recordStats:null,recordFilter:"all",marketRecordFilter:"all",recordLeagueFilter:"all",recordsLoaded:false,recordsLoading:false,recordsError:"",recordsAccessRole:"",
+      records:[],marketRecords:[],proPerformance:null,recordStats:null,recordFilter:"all",marketRecordFilter:"all",recordLeagueFilter:"all",recordsLoaded:false,recordsLoading:false,recordsError:"",recordsAccessRole:"",recordsAccessKey:"",
       founderCandidateDate:"",founderCandidateLeague:"MLB",founderCandidatesLoading:false,founderFreeBundle:null,
       founderMarketDate:"",founderMarketLeague:"MLB",founderMarketsLoading:false,founderMarketBundle:null,
       publishingStatusDate:"",publishingStatusLeague:"MLB",publishingStatusLoading:false,publishingStatus:null,
@@ -2214,7 +2214,9 @@
           if(isAdminMember()){loadSmartPublishingStatus();loadFounderCandidates();loadFounderMarkets();}
         }
       }
-      if(pageId==="recordsPage"&&(!state.recordsLoaded||state.recordsAccessRole!==authState.role)) loadRecords(true);
+      // The founder console always refreshes records when this page is opened.
+      // This prevents an anonymous preload from being reused after admin auth.
+      if(pageId==="recordsPage"&&authState.ready) loadRecords(true);
       if(pageId==="adminMembersPage"){
         if(!isAdminMember()){showPage("morePage");showToast("此功能僅限創辦人使用");return}
         loadAdminMembers();
@@ -2685,6 +2687,9 @@
     function isProMember(){
       return isSignedIn()&&(authState.role==="pro"||authState.role==="admin");
     }
+    function recordsAccessKey(){
+      return `${authState.user?.id||"guest"}:${authState.role}:${authState.session?.access_token?"authenticated":"anonymous"}`;
+    }
     function renderMembershipState(){
       const signedIn=isSignedIn();
       const admin=isAdminMember();
@@ -2776,7 +2781,11 @@
       if(signedIn)loadBillingStatus();
       renderPredictionAccess();
       renderRecords();
-      if(document.getElementById("recordsPage")?.classList.contains("active")&&state.recordsAccessRole!==authState.role)loadRecords(true);
+      if(
+        authState.ready
+        &&document.getElementById("recordsPage")?.classList.contains("active")
+        &&state.recordsAccessKey!==recordsAccessKey()
+      )loadRecords(true);
       if(signedIn&&document.getElementById("predictionPage")?.classList.contains("active")){
         loadTopPrediction();
         if(isAdminMember()){loadSmartPublishingStatus();loadFounderCandidates();loadFounderMarkets();}
@@ -2795,6 +2804,7 @@
       state.proPerformance=null;
       state.recordsLoaded=false;
       state.recordsAccessRole="";
+      state.recordsAccessKey="";
       state.founderCandidateDate="";
       state.founderFreeBundle=null;
       state.founderMarketDate="";
@@ -3116,6 +3126,10 @@
         if(callback?.handled)showToast(authErrorMessage(error));
       }finally{
         authState.ready=true;
+        // Re-render once authentication has definitively completed. Record
+        // loading is deliberately deferred until this point so the founder
+        // request always carries the admin bearer token.
+        renderAuthState();
         handlePaymentReturn();
         loadHomeAnnouncements(true);
         if(isSignedIn()&&authState.passwordChangeRequired){
@@ -3404,16 +3418,27 @@
     }
 
     async function loadRecords(force=false){
+      if(!authState.ready)return;
       if(state.recordsLoading||(!force&&state.recordsLoaded))return;
+      const requestedAccessKey=recordsAccessKey();
+      const requestedToken=authState.session?.access_token||"";
+      let accessChanged=false;
       state.recordsLoading=true;
       state.recordsError="";
       setRecordsApiStatus("真實資料連線中");
       renderRecords();
       try{
         const headers={};
-        if(authState.session?.access_token)headers.Authorization=`Bearer ${authState.session.access_token}`;
+        if(requestedToken)headers.Authorization=`Bearer ${requestedToken}`;
         const payload=await fetchJsonWithRetry(`${API_BASE}/records`,30000,{headers},1);
+        if(requestedAccessKey!==recordsAccessKey()||requestedToken!==(authState.session?.access_token||"")){
+          accessChanged=true;
+          return;
+        }
         if(payload.is_demo||payload.database!=="connected")throw new Error("Records database unavailable");
+        if(isAdminMember()&&(payload.member?.role!=="admin"||payload.member?.has_pro_access!==true)){
+          throw new Error("Founder records access is not synchronized");
+        }
         state.records=Array.isArray(payload.items)?payload.items:[];
         state.marketRecords=isProMember()&&Array.isArray(payload.market_packages)
           ?payload.market_packages.filter(bundle=>{
@@ -3424,6 +3449,7 @@
         state.proPerformance=isAdminMember()&&payload.pro_performance?payload.pro_performance:null;
         state.recordStats=payload.stats||null;
         state.recordsAccessRole=authState.role;
+        state.recordsAccessKey=requestedAccessKey;
         state.recordsLoaded=true;
         setRecordsApiStatus("真實紀錄已連線");
       }catch(error){
@@ -3433,10 +3459,17 @@
         state.recordStats=null;
         state.recordsLoaded=false;
         state.recordsAccessRole=authState.role;
+        state.recordsAccessKey=requestedAccessKey;
         state.recordsError="紀錄 API 暫時無法連線";
         setRecordsApiStatus("紀錄 API 暫時離線",true);
       }finally{
         state.recordsLoading=false;
+        if(accessChanged){
+          state.recordsLoaded=false;
+          state.recordsAccessRole="";
+          state.recordsAccessKey="";
+          window.setTimeout(()=>loadRecords(true),0);
+        }
         renderRecords();
       }
     }
@@ -6206,11 +6239,10 @@
     document.getElementById("founderMarketDate").value=taiwanToday();
     renderRecords();
     renderAuthState();
-    loadRecords();
     loadHomeAnnouncements(true);
     if(initialHash&&pages.includes(`${initialHash}Page`))showPage(`${initialHash}Page`);
     else loadHomeLeagueSummary();
-    initializeAuth(authCallback);
+    initializeAuth(authCallback).then(()=>loadRecords(true));
     </script>
 
   <script id="diamondmind-founder-split-script">
