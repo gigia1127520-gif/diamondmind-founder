@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.6 · NPB/KBO Model-Only Fallback · Backend V22.4.5 -->
-  <meta name="diamondmind-version" content="18.17.6-founder">
+  <!-- DiamondMind Founder Console V18.17.7 · Asian Model-Direction Moneyline · Backend V22.4.7 -->
+  <meta name="diamondmind-version" content="18.17.7-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.4.5">
+  <meta name="diamondmind-backend-target" content="22.4.7">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1019,9 +1019,9 @@
           </div>
           <div class="home-league-grid" id="homeLeagueGrid">
             <article class="card home-league-card active" data-home-league="MLB"><div class="home-league-top"><span class="home-league-code">MLB</span><span class="home-league-state">完整運作</span></div><h3>美國職棒</h3><p>完整五大引擎、盤口、Pro 推薦與自動結算。</p><span class="home-league-count" id="homeLeagueMLBCount">今日資料載入中</span></article>
-            <article class="card home-league-card active" data-home-league="NPB"><div class="home-league-top"><span class="home-league-code">NPB</span><span class="home-league-state">完整運作</span></div><h3>日本職棒</h3><p>有盤口時加入市場分析；缺盤時改用純模型獨贏，並持續發布與結算。</p><span class="home-league-count" id="homeLeagueNPBCount">今日資料載入中</span></article>
-            <article class="card home-league-card active" data-home-league="KBO"><div class="home-league-top"><span class="home-league-code">KBO</span><span class="home-league-state">完整運作</span></div><h3>韓國職棒</h3><p>有盤口時加入市場分析；缺盤時改用純模型獨贏，並持續發布與結算。</p><span class="home-league-count" id="homeLeagueKBOCount">今日資料載入中</span></article>
-            <article class="card home-league-card active" data-home-league="CPBL"><div class="home-league-top"><span class="home-league-code">CPBL</span><span class="home-league-state">正式啟用</span></div><h3>中華職棒</h3><p>官方賽程、真實盤口、免費推薦、Pro 發布與自動發布。</p><span class="home-league-count" id="homeLeagueCPBLCount">今日資料載入中</span></article>
+            <article class="card home-league-card active" data-home-league="NPB"><div class="home-league-top"><span class="home-league-code">NPB</span><span class="home-league-state">完整運作</span></div><h3>日本職棒</h3><p>單場獨贏採模型方向；有盤口僅作參考，缺盤仍可發布。</p><span class="home-league-count" id="homeLeagueNPBCount">今日資料載入中</span></article>
+            <article class="card home-league-card active" data-home-league="KBO"><div class="home-league-top"><span class="home-league-code">KBO</span><span class="home-league-state">完整運作</span></div><h3>韓國職棒</h3><p>單場獨贏採模型方向；有盤口僅作參考，缺盤仍可發布。</p><span class="home-league-count" id="homeLeagueKBOCount">今日資料載入中</span></article>
+            <article class="card home-league-card active" data-home-league="CPBL"><div class="home-league-top"><span class="home-league-code">CPBL</span><span class="home-league-state">正式啟用</span></div><h3>中華職棒</h3><p>單場獨贏採模型方向；有盤口僅作參考，缺盤仍可發布。</p><span class="home-league-count" id="homeLeagueCPBLCount">今日資料載入中</span></article>
           </div>
         </div>
       </div>
@@ -1071,7 +1071,7 @@
           </div>
           <div class="how-grid">
             <article class="card how-card"><span class="step-no">1</span><h3>完整賽事</h3><p>集中顯示 MLB、NPB、KBO、CPBL 賽程、台灣時間、即時比分與已取得的預告先發。</p></article>
-            <article class="card how-card"><span class="step-no">2</span><h3>跨聯盟推薦</h3><p>四個聯盟各自保留正式免費精選；NPB／KBO 有盤口就加入市場分析，缺盤則只發布純模型獨贏。</p></article>
+            <article class="card how-card"><span class="step-no">2</span><h3>跨聯盟推薦</h3><p>四個聯盟各自保留正式免費精選；NPB／KBO／CPBL 單場獨贏依模型方向發布，盤口不作門檻。</p></article>
             <article class="card how-card"><span class="step-no">3</span><h3>結果可驗證</h3><p>推薦發布後保留原始內容，賽後自動標記命中、未中或走水。</p></article>
           </div>
         </div>
@@ -1221,7 +1221,7 @@
               </article>
               <article class="smart-channel-card">
                 <div class="smart-channel-head"><b>PRO 會員通道</b><span id="smartProState" class="waiting">等待檢查</span></div>
-                <p id="smartProAdvice">NPB／KBO 有盤口時使用完整玩法；缺盤時只接受純模型獨贏。未授權會員仍由後端阻擋。</p>
+                <p id="smartProAdvice">NPB／KBO／CPBL 單場獨贏採模型方向；盤口只作參考，讓分、大小分與串關仍須有效盤口。</p>
                 <small>資料庫：prediction_packages · 可見範圍：Pro／創辦人</small>
                 <button type="button" class="btn ghost small" id="smartLoadPro">載入 Pro AI 建議</button>
               </article>
@@ -1245,7 +1245,7 @@
 
           <section class="card founder-console" data-auth-admin hidden aria-labelledby="founderMarketTitle">
             <div class="founder-console-head">
-              <div><div class="kicker">PRO PUBLISH CONTROL</div><h2 id="founderMarketTitle">付費會員推薦管理</h2><p>NPB／KBO 有有效盤口時提供完整玩法，缺盤時只保留純模型獨贏；CPBL 與 MLB 的真實盤口規則維持不變。</p></div>
+              <div><div class="kicker">PRO PUBLISH CONTROL</div><h2 id="founderMarketTitle">付費會員推薦管理</h2><p>NPB／KBO／CPBL 單場獨贏採模型方向，不以 52% 或市場優勢阻擋；讓分、大小分與串關仍須有效盤口。</p></div>
               <span class="micro-pill">僅創辦人可見</span>
             </div>
             <div class="founder-toolbar">
@@ -2161,9 +2161,9 @@
 
     const leagueUi={
       MLB:{kicker:"TODAY'S MLB",description:"依台灣日期載入 MLB 全部賽事，點擊任一場查看比賽資料。",connection:"MLB 資料連線"},
-      NPB:{kicker:"TODAY'S NPB",description:"日本職棒：有有效盤口時加入市場分析；缺盤時使用球隊、先發、打線、牛棚與進階資料完成純模型獨贏。",connection:"NPB 官方資料＋選用真實盤口"},
-      KBO:{kicker:"TODAY'S KBO",description:"韓國職棒：有有效盤口時加入市場分析；缺盤時使用球隊、先發、打線、牛棚與進階資料完成純模型獨贏。",connection:"KBO 官方資料＋選用真實盤口"},
-      CPBL:{kicker:"TODAY'S CPBL",description:"中華職棒：載入官方賽程、比分、真實盤口與 DiamondMind 推薦發布狀態。",connection:"CPBL 官方資料＋真實盤口"}
+      NPB:{kicker:"TODAY'S NPB",description:"日本職棒：比較球隊、先發、打線、牛棚與進階資料後發布模型方向獨贏；盤口僅作參考。",connection:"NPB 官方資料＋選用真實盤口"},
+      KBO:{kicker:"TODAY'S KBO",description:"韓國職棒：比較球隊、先發、打線、牛棚與進階資料後發布模型方向獨贏；盤口僅作參考。",connection:"KBO 官方資料＋選用真實盤口"},
+      CPBL:{kicker:"TODAY'S CPBL",description:"中華職棒：比較官方賽事資料後發布模型方向獨贏；盤口有則參考，無盤口仍可發布。",connection:"CPBL 官方資料＋選用真實盤口"}
     };
 
     const allStarTeamById={
@@ -4166,7 +4166,7 @@
       const note=document.getElementById("proPredictionNote");
       if(note)note.textContent=isAdminMember()
         ?"會員區只顯示正式發布推薦；觀察候選僅限創辦人內部審核。"
-        :"MLB／CPBL 維持真實盤口門檻；NPB／KBO 缺盤時只顯示純模型獨贏，不會產生模擬盤口。";
+        :"MLB 維持原盤口門檻；NPB／KBO／CPBL 單場獨贏採模型方向，不會產生模擬盤口。";
     }
 
     function memberVisibleSelectionSummary(value){
@@ -4237,11 +4237,15 @@
         matchup.textContent=`${selection.league?`[${selection.league}] `:""}${localizeMatchup(selection.matchup||"棒球賽事")}${selectionScheduleSuffix(selection)}`;
         const metrics=document.createElement("div");
         metrics.className="pro-metrics";
+        const modelDirection=selection.qualification_policy==="model_direction";
+        const directionProbability=selection.model_direction_probability??selection.raw_model_probability??selection.model_probability;
         [
-          selection.model_probability!=null?`模型 ${selection.model_probability}%`:null,
-          selection.analysis_mode==="model_only"||selection.market_basis==="model_only"?"純模型分析 · 未採用盤口":selection.odds_analysis_included?"包含真實盤口分析":null,
-          selection.edge!=null?`優勢 ${Number(selection.edge)>0?"+":""}${selection.edge}%`:null,
-          selection.price!=null?`盤口 ${formatAmericanOdds(selection.price)}`:null,
+          directionProbability!=null?`${modelDirection?"模型方向":"模型"} ${directionProbability}%`:null,
+          modelDirection
+            ?(selection.analysis_mode==="model_only"||selection.market_basis==="model_only"?"純模型方向 · 未採用盤口":"模型方向制 · 盤口僅供參考")
+            :selection.analysis_mode==="model_only"||selection.market_basis==="model_only"?"純模型分析 · 未採用盤口":selection.odds_analysis_included?"包含真實盤口分析":null,
+          !modelDirection&&selection.edge!=null?`優勢 ${Number(selection.edge)>0?"+":""}${selection.edge}%`:null,
+          selection.price!=null?`${modelDirection?"參考盤口":"盤口"} ${formatAmericanOdds(selection.price)}`:null,
           selection.odds_source?.bookmaker?`來源 ${selection.odds_source.bookmaker}`:null
         ].filter(Boolean).forEach(value=>{
           const chip=document.createElement("span");
@@ -4339,10 +4343,12 @@
         matchup.textContent=`${selection.league?`[${selection.league}] `:""}${localizeMatchup(selection.matchup||"棒球賽事")}${selectionScheduleSuffix(selection)}`;
         const metrics=document.createElement("div");
         metrics.className="pro-metrics";
+        const modelDirection=selection.qualification_policy==="model_direction";
+        const directionProbability=selection.model_direction_probability??selection.raw_model_probability??selection.model_probability;
         [
-          selection.model_probability!=null?`模型 ${selection.model_probability}%`:null,
-          selection.edge!=null?`優勢 ${Number(selection.edge)>0?"+":""}${selection.edge}%`:null,
-          selection.price!=null?`盤口 ${formatAmericanOdds(selection.price)}`:null,
+          directionProbability!=null?`${modelDirection?"模型方向":"模型"} ${directionProbability}%`:null,
+          !modelDirection&&selection.edge!=null?`優勢 ${Number(selection.edge)>0?"+":""}${selection.edge}%`:null,
+          selection.price!=null?`${modelDirection?"參考盤口":"盤口"} ${formatAmericanOdds(selection.price)}`:null,
           selection.odds_source?.bookmaker?`來源 ${selection.odds_source.bookmaker}`:null
         ].filter(Boolean).forEach(value=>{
           const chip=document.createElement("span");
@@ -5097,8 +5103,12 @@
         const selected=free.selection||{};
         freeText.textContent=`已鎖定：${localizeMatchup(selected.matchup||"免費精選")} · ${localizePickLabel(selected.pick||"—")}。不會被自動流程覆蓋。`;
       }else if(freeSuggestion){
-        const freeMode=freeSuggestion.analysis_mode==="model_only"?"純模型獨贏（未採用盤口）":"包含真實盤口分析";
-        freeText.textContent=`AI 首選：${localizeMatchup(freeSuggestion.matchup||"—")} · ${localizePickLabel(freeSuggestion.pick?.label||"—",freeSuggestion)} · 信心 ${Number(freeSuggestion.confidence||0).toFixed(1)}% · ${freeMode}。`;
+        const modelDirection=freeSuggestion.qualification_policy==="model_direction";
+        const freeMode=modelDirection
+          ?(freeSuggestion.analysis_mode==="model_only"?"純模型方向（未採用盤口）":"模型方向制（盤口僅供參考）")
+          :freeSuggestion.analysis_mode==="model_only"?"純模型獨贏（未採用盤口）":"包含真實盤口分析";
+        const directionProbability=freeSuggestion.model_direction_probability??freeSuggestion.confidence??0;
+        freeText.textContent=`AI 首選：${localizeMatchup(freeSuggestion.matchup||"—")} · ${localizePickLabel(freeSuggestion.pick?.label||"—",freeSuggestion)} · ${modelDirection?"模型方向":"信心"} ${Number(directionProbability).toFixed(1)}% · ${freeMode}。`;
       }else{
         freeText.textContent=`${code} Free 尚未鎖定；載入後會把最高信心且仍未開賽的有效獨贏候選排在最前面。`;
       }
@@ -5106,11 +5116,12 @@
         proText.textContent=`已鎖定 ${Number(pro.selection_count||0)} 項 Pro 玩法；只有 Pro／創辦人帳號能由後端取得完整內容。`;
       }else if(proSuggestedCount){
         const proMode=proBundle?.readiness?.[code]?.analysis_mode||proBundle?.league_status?.[code]?.analysis_mode;
-        const proModeText=proMode==="model_only"?"本批僅有純模型獨贏，不含盤口玩法":proMode==="mixed"?"本批同時包含真實盤口玩法與缺盤場次的純模型獨贏":"本批包含真實盤口分析";
+        const asianDirection=["NPB","KBO","CPBL"].includes(code);
+        const proModeText=proMode==="model_only"?"本批僅有純模型方向獨贏，不含盤口玩法":proMode==="mixed"?"本批同時包含參考盤口與缺盤場次的純模型方向獨贏":asianDirection?"本批獨贏採模型方向制，盤口只作參考":"本批包含真實盤口分析";
         proText.textContent=`AI 建議已選出 ${proSuggestedCount} 項玩法；${proModeText}，仍須在 Pro 區單獨確認。`;
       }else{
-        proText.textContent=["NPB","KBO"].includes(code)
-          ?`${code} Pro 尚未鎖定；有盤口時加入完整玩法，缺盤時仍會建立純模型獨贏候選。`
+        proText.textContent=["NPB","KBO","CPBL"].includes(code)
+          ?`${code} Pro 尚未鎖定；單場獨贏依模型方向建立，有盤口時只作參考，缺盤時仍可發布純模型方向。`
           :`${code} Pro 尚未鎖定；載入後只會建議具備有效方向與真實盤口的正式候選。`;
       }
       if(automatic){
@@ -5183,11 +5194,15 @@
         const resultLabels={won:"命中",lost:"未中",push:"走水",void:"作廢",pending:"等待賽果"};
         const score=result.away_score!=null&&result.home_score!=null?`終場 ${result.away_score}–${result.home_score}`:"";
         const league=String(selection.league||document.getElementById("founderPredictionLeague")?.value||"MLB").toUpperCase();
+        const modelDirection=selection.qualification_policy==="model_direction";
+        const directionProbability=selection.model_direction_probability??selection.raw_model_probability??confidence;
         const metrics=[
-          Number.isFinite(confidence)?`模型 ${confidence.toFixed(1)}%`:null,
-          selection.publication?.analysis_mode==="model_only"?"純模型獨贏（未採用盤口）":selection.publication?.odds_analysis_included?"包含真實盤口分析":null,
-          selection.edge!=null?`優勢 ${Number(selection.edge)>0?"+":""}${Number(selection.edge).toFixed(1)}%`:null,
-          selection.price!=null?`盤口 ${formatAmericanOdds(selection.price)}`:null
+          Number.isFinite(Number(directionProbability))?`${modelDirection?"模型方向":"模型"} ${Number(directionProbability).toFixed(1)}%`:null,
+          modelDirection
+            ?(selection.publication?.analysis_mode==="model_only"?"純模型方向（未採用盤口）":"模型方向制（盤口僅供參考）")
+            :selection.publication?.analysis_mode==="model_only"?"純模型獨贏（未採用盤口）":selection.publication?.odds_analysis_included?"包含真實盤口分析":null,
+          !modelDirection&&selection.edge!=null?`優勢 ${Number(selection.edge)>0?"+":""}${Number(selection.edge).toFixed(1)}%`:null,
+          selection.price!=null?`${modelDirection?"參考盤口":"盤口"} ${formatAmericanOdds(selection.price)}`:null
         ].filter(Boolean).map(value=>`<span>${escapeHtml(value)}</span>`).join("");
         list.innerHTML=`<article class="pro-selection-item founder-published-compact">
           <div class="pro-selection-head">
@@ -5214,14 +5229,16 @@
           ...(item.blockers||[]).map(message=>`<p class="founder-warning founder-blocker">阻擋：${escapeHtml(message)}</p>`)
         ].join("");
         const league=String(item.league||payload.league||document.getElementById("founderPredictionLeague")?.value||"MLB").toUpperCase();
+        const modelDirection=item.qualification_policy==="model_direction";
+        const directionProbability=item.model_direction_probability??item.confidence??0;
         const buttonText=item.can_publish?(item.requires_confirmation?`確認後指定 ${league}`:`指定為 ${league} 免費推薦`):"目前不可發布";
         return `<article class="founder-candidate ${item.can_publish?"":"blocked"}">
           <div class="founder-candidate-top"><b>${escapeHtml(localizeMatchup(item.matchup||"MLB"))}</b><span>${escapeHtml(selectionScheduleLabel(item)||"時間待定")}</span></div>
           <div class="founder-tags">
             <span class="${item.event?.special?"special":""}">${escapeHtml(item.event?.label||"例行賽")}</span>
-            <span>信心 ${Number(item.confidence||0).toFixed(1)}%</span>
+            <span>${modelDirection?"模型方向":"信心"} ${Number(directionProbability).toFixed(1)}%</span>
             <span>資料完整度 ${Math.round(Number(item.data_quality||0)*100)}%</span>
-            <span>${item.analysis_mode==="model_only"?"純模型獨贏（未採用盤口）":item.odds_analysis_included?"包含真實盤口分析":"模型賽事分析"}</span>
+            <span>${modelDirection?(item.analysis_mode==="model_only"?"純模型方向（未採用盤口）":"模型方向制（盤口僅供參考）"):item.analysis_mode==="model_only"?"純模型獨贏（未採用盤口）":item.odds_analysis_included?"包含真實盤口分析":"模型賽事分析"}</span>
             <span>${escapeHtml(localizePickLabel(item.pick?.label||"尚無推薦方向",item))}</span>
             <span>${escapeHtml(item.timing?.label||"賽前狀態待確認")}</span>
             <span>名單驗證 ${item.roster_validation?.status==="valid"?"通過":item.roster_validation?.status==="mismatch"?"不一致":"待確認"}</span>
@@ -5251,8 +5268,8 @@
       if(!force&&state.founderCandidateDate===date&&state.founderCandidateLeague===league)return;
       state.founderCandidatesLoading=true;
       const asianLeague=["NPB","KBO","CPBL"].includes(league);
-      status.textContent=["NPB","KBO"].includes(league)
-        ?`正在載入 ${league} 官方賽程、模型與可用盤口；無有效盤口時仍會建立純模型獨贏…`
+      status.textContent=["NPB","KBO","CPBL"].includes(league)
+        ?`正在載入 ${league} 官方賽程與模型；單場獨贏依模型方向建立，盤口有則只作參考…`
         :asianLeague
           ?`正在載入 ${league} 官方賽程與基礎模型，首次整理可能需要 20～60 秒…`
           :`正在載入 ${league} 每日免費精選候選…`;
@@ -5346,7 +5363,7 @@
       const ready=["ready","ready_mixed","ready_model_only"].includes(readiness.status);
       const readinessState=String(readiness.status||"");
       const stateLabel=readinessState==="ready_model_only"
-        ?"可發布純模型獨贏"
+        ?"可發布純模型方向獨贏"
         :readinessState==="ready_mixed"
           ?"可發布混合分析"
           :ready
@@ -5368,7 +5385,7 @@
       const oddsCaptured=oddsFeed.snapshot_captured_at?formatAdminDateTime(oddsFeed.snapshot_captured_at):"本次即時抓取";
       const oddsAge=oddsFeed.snapshot_age_minutes==null?"":` · ${Math.max(0,Math.round(Number(oddsFeed.snapshot_age_minutes)||0))} 分鐘前`;
       const snapshotLabel=oddsFeed.persistent_snapshot?(realOdds?"永久快照仍在鮮度內":"永久快照僅供查看"):realOdds?"即時盤口":"未採用盤口";
-      const analysisLabel=analysisMode==="model_only"?"純模型獨贏":analysisMode==="mixed"?"盤口＋純模型混合":"真實盤口分析";
+      const analysisLabel=analysisMode==="model_only"?"純模型方向獨贏":analysisMode==="mixed"?"參考盤口＋純模型方向":league==="MLB"?"真實盤口分析":"模型方向＋參考盤口";
       return `<section class="founder-market-readiness ${ready?"ready":"waiting"}">
         <div class="founder-market-readiness-head"><div><h4>${escapeHtml(league)} Pro 發布驗證</h4><p>${escapeHtml(readiness.message||"正在驗證模型與可用盤口。")}</p></div><span class="founder-market-readiness-state">${escapeHtml(stateLabel)}</span></div>
         <div class="founder-readiness-metrics"><span>賽程 ${Number(readiness.schedule_games||0)}</span><span>模型完成 ${Number(readiness.analyzed_games||readiness.full_model_ready_games||0)}</span><span>分析模式 ${escapeHtml(analysisLabel)}</span><span>盤口配對 ${Number(readiness.matched_games||0)}</span><span>盤口候選 ${Number(readiness.real_odds_candidates||0)}</span><span>純模型獨贏 ${Number(readiness.model_only_candidates||0)}</span><span>讓分盤 ${Number(coverage.run_line||0)}</span><span>大小分盤 ${Number(coverage.totals||0)}</span><span>真實盤口 ${realOdds?"已取得":"未採用"}</span><span>正式候選 ${Number(readiness.formal_candidates||0)}</span><span>來源 ${escapeHtml(oddsProvider)}</span><span>${escapeHtml(snapshotLabel)} · ${escapeHtml(oddsCaptured)}${escapeHtml(oddsAge)}</span></div>
@@ -5387,9 +5404,11 @@
       }
       const reasons=asSelectionArray(item.watchlist_reasons);
       const bookmaker=item.odds_source?.bookmaker||item.odds_source?.bookmaker_key||"";
+      const modelDirection=item.qualification_policy==="model_direction";
+      const directionProbability=item.model_direction_probability??item.raw_model_probability??item.model_probability;
       return {
         title:localizePickLabel(item.pick?.label||(isWatchlist?"觀察項目":"正式推薦"),item),
-        meta:`${item.league?`[${item.league}] `:""}${localizeMatchup(item.matchup||"棒球賽事")}${selectionScheduleSuffix(item)}${item.model_probability!=null?` · 模型 ${item.model_probability}%`:""}${item.edge!=null?` · 優勢 ${Number(item.edge)>0?"+":""}${item.edge}%`:""}${item.price!=null?` · ${formatAmericanOdds(item.price)}`:""}${bookmaker?` · ${bookmaker}`:""}${item.market_basis==="model_only"?" · 純模型獨贏（無盤口）":""}${isWatchlist&&reasons.length?` · ${reasons.join("；")}`:""}`
+        meta:`${item.league?`[${item.league}] `:""}${localizeMatchup(item.matchup||"棒球賽事")}${selectionScheduleSuffix(item)}${directionProbability!=null?` · ${modelDirection?"模型方向":"模型"} ${directionProbability}%`:""}${!modelDirection&&item.edge!=null?` · 優勢 ${Number(item.edge)>0?"+":""}${item.edge}%`:""}${item.price!=null?` · ${modelDirection?"參考盤口 ":""}${formatAmericanOdds(item.price)}`:""}${bookmaker?` · ${bookmaker}`:""}${item.market_basis==="model_only"?" · 純模型方向獨贏（無盤口）":modelDirection?" · 不套用市場優勢門檻":""}${isWatchlist&&reasons.length?` · ${reasons.join("；")}`:""}`
       };
     }
 
@@ -5646,8 +5665,8 @@
       state.founderMarketsLoading=true;
       document.getElementById("founderPublishMarkets").disabled=true;
       const asianLeague=["NPB","KBO","CPBL"].includes(league);
-      status.textContent=["NPB","KBO"].includes(league)
-        ?`正在載入 ${league} 模型；有有效盤口會加入盤口分析，否則建立純模型獨贏，首次整理約需 30～90 秒…`
+      status.textContent=["NPB","KBO","CPBL"].includes(league)
+        ?`正在載入 ${league} 模型方向；有盤口時作參考，無盤口仍可建立單場獨贏，首次整理約需 30～90 秒…`
         :asianLeague
           ?`正在載入 ${league} 推薦方向、真實盤口與發布安全檢查，首次整理可能需要 30～90 秒…`
           :`正在載入 ${league} 真實盤口與官方數據模型候選…`;
@@ -5995,6 +6014,8 @@
             price:selection.price,
             edge:selection.edge,
             impliedProbability:selection.implied_probability,
+            qualificationPolicy:selection.qualification_policy,
+            modelDirectionProbability:selection.model_direction_probability??selection.raw_model_probability,
             analysisMode:selection.publication?.analysis_mode||selection.analysis_mode,
             eventLabel:selection.publication?.event_label||selection.game?.event_label,
             founderSelected:selection.publication?.mode==="founder_selected",
@@ -6027,7 +6048,7 @@
           }else renderLockedProPredictions();
           if(fallback.published&&fallback.selection){
             const selection=fallback.selection;
-            window.setDiamondMindPrediction({confidence:selection.confidence,matchup:selection.matchup,time:selectionScheduleLabel(selection),pick:selection.pick?.label||"—",factors:selection.factors||[],analysisGroups:selection.analysis_groups||{},engine:selection.engine||{},analysisMode:selection.publication?.analysis_mode||selection.analysis_mode,eventLabel:selection.publication?.event_label||selection.game?.event_label,founderSelected:selection.publication?.mode==="founder_selected",targetDate:fallback.target_date||selection.target_date,publishedAt:fallback.published_at||selection.published_at,batchStatus:fallback.status||selection.status||"published",result:selection.result||null});
+            window.setDiamondMindPrediction({confidence:selection.confidence,matchup:selection.matchup,time:selectionScheduleLabel(selection),pick:selection.pick?.label||"—",factors:selection.factors||[],analysisGroups:selection.analysis_groups||{},engine:selection.engine||{},price:selection.price,edge:selection.edge,impliedProbability:selection.implied_probability,qualificationPolicy:selection.qualification_policy,modelDirectionProbability:selection.model_direction_probability??selection.raw_model_probability,analysisMode:selection.publication?.analysis_mode||selection.analysis_mode,eventLabel:selection.publication?.event_label||selection.game?.event_label,founderSelected:selection.publication?.mode==="founder_selected",targetDate:fallback.target_date||selection.target_date,publishedAt:fallback.published_at||selection.published_at,batchStatus:fallback.status||selection.status||"published",result:selection.result||null});
             schedulePredictionAutoRefresh(true);
           }else{
             stopPredictionAutoRefresh();
@@ -6197,7 +6218,8 @@
       if(!prediction)return;
       document.getElementById("predictionEmpty").hidden=true;
       document.getElementById("predictionPreview").hidden=false;
-      const confidence=Number(prediction.confidence||0);
+      const modelDirection=prediction.qualificationPolicy==="model_direction";
+      const confidence=Number(modelDirection?(prediction.modelDirectionProbability??prediction.confidence??0):(prediction.confidence||0));
       document.getElementById("predictionConfidence").textContent=`${confidence.toFixed(1).replace(/\.0$/,"")}%`;
       document.querySelector(".confidence-ring").style.background=`conic-gradient(var(--green) 0 ${confidence}%,rgba(255,255,255,.05) ${confidence}%)`;
       document.getElementById("predictionMatchup").textContent=localizeMatchup(prediction.matchup);
@@ -6210,14 +6232,14 @@
         sourceChip.textContent=founderPick?`${state.predictionLeague} 創辦人精選 · 已鎖定`:`${state.predictionLeague} 免費精選`;
         sourceChip.classList.toggle("founder-source-chip",founderPick);
       }
-      if(pickSourceLabel)pickSourceLabel.textContent=prediction.analysisMode==="model_only"?"AI 純模型獨贏推薦":founderPick?"創辦人正式推薦":"AI 獨贏推薦";
+      if(pickSourceLabel)pickSourceLabel.textContent=modelDirection?(prediction.analysisMode==="model_only"?"AI 純模型方向獨贏":"AI 模型方向獨贏"):prediction.analysisMode==="model_only"?"AI 純模型獨贏推薦":founderPick?"創辦人正式推薦":"AI 獨贏推薦";
       const meta=document.getElementById("predictionMarketMeta");
       meta.replaceChildren();
       [
-        prediction.analysisMode==="model_only"?"純模型分析 · 未採用盤口":null,
-        prediction.price!=null?`盤口 ${formatAmericanOdds(prediction.price)}`:null,
-        prediction.edge!=null?`市場優勢 ${Number(prediction.edge)>0?"+":""}${prediction.edge}%`:null,
-        prediction.impliedProbability!=null?`市場機率 ${prediction.impliedProbability}%`:null,
+        modelDirection?(prediction.analysisMode==="model_only"?"純模型方向 · 未採用盤口":"模型方向制 · 盤口僅供參考"):prediction.analysisMode==="model_only"?"純模型分析 · 未採用盤口":null,
+        prediction.price!=null?`${modelDirection?"參考盤口":"盤口"} ${formatAmericanOdds(prediction.price)}`:null,
+        !modelDirection&&prediction.edge!=null?`市場優勢 ${Number(prediction.edge)>0?"+":""}${prediction.edge}%`:null,
+        !modelDirection&&prediction.impliedProbability!=null?`市場機率 ${prediction.impliedProbability}%`:null,
         prediction.eventLabel&&prediction.eventLabel!=="例行賽"?prediction.eventLabel:null
       ].filter(Boolean).forEach(value=>{
         const chip=document.createElement("span");
