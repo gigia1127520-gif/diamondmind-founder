@@ -1,4 +1,4 @@
-DiamondMind 創辦人後台 V18.17.5
+DiamondMind 創辦人後台 V18.17.6
 ==============================
 
 建議儲存庫
@@ -27,6 +27,8 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 - 顯示盤口來源、最後抓取時間與永久快照鮮度
 - NPB／KBO／CPBL 開賽前 12 小時開始保存真實盤口
 - NPB／KBO／CPBL 開賽前 3 小時才允許自動正式發布 Free／Pro
+- NPB／KBO 有有效盤口時加入盤口分析；沒有有效盤口時改用純模型獨贏
+- 純模型模式不顯示盤口、賠率、市場機率或市場優勢，也不建立讓分、大小分與串關
 - 修正創辦人登入完成前的訪客紀錄被誤快取，造成會員端有 Pro 紀錄但後台顯示 0 筆
 - 每次進入「紀錄」頁都會以創辦人權限重新同步正式 Pro 紀錄
 
@@ -51,10 +53,10 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 
 後端
 ----
-使用 DiamondMind Backend V22.4.4；若尚未執行過，須先在 Supabase SQL Editor 執行
+使用 DiamondMind Backend V22.4.5；若尚未執行過，須先在 Supabase SQL Editor 執行
 DIAMONDMIND_V22.4.3_SUPABASE_盤口快照.sql.txt，讓最後真實盤口與
 免費 API 冷卻狀態可跨 Render 重啟保留。無需新增 Render 環境變數；
 既有 ODDS_API_IO_KEY 會同時供 MLB、NPB、KBO、CPBL 使用。
-V22.4.4 沒有新增資料表；已執行過 V22.4.3 SQL 就不用重跑。
+V22.4.5 沒有新增資料表；已執行過 V22.4.3 SQL 就不用重跑。
 兩個 GitHub Pages 儲存庫都位於同一個 github.io origin，
 現有後端 CORS 設定已允許該 origin。
