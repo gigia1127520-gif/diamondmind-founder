@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.18.0 · Model Stability Center · Backend V22.5.0 -->
-  <meta name="diamondmind-version" content="18.18.0-founder">
+  <!-- DiamondMind Founder Console V18.18.1 · Stability Direct Rollback · Backend V22.5.0 -->
+  <meta name="diamondmind-version" content="18.18.1-founder">
   <meta name="diamondmind-site" content="founder">
   <meta name="diamondmind-backend-target" content="22.5.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -792,6 +792,11 @@
     .model-stability-leaders{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:13px}
     .model-stability-leader{min-width:0;padding:13px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(0,0,0,.18)}
     .model-stability-leader small{display:block;color:var(--muted);font-size:9px}.model-stability-leader b{display:block;overflow:hidden;margin-top:6px;color:#edf7f4;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+    .model-current-production{margin-bottom:13px;padding:14px;border:1px solid rgba(55,244,164,.28);border-radius:15px;background:rgba(55,244,164,.04)}
+    .model-current-production-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.model-current-production-head b{color:var(--green);font-size:12px}.model-current-production-head span{color:var(--muted);font-size:9px;text-align:right}
+    .model-current-production-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+    .model-current-production-item{min-width:0;padding:11px;border:1px solid rgba(255,255,255,.055);border-radius:12px;background:rgba(0,0,0,.16)}
+    .model-current-production-item b{display:block;overflow-wrap:anywhere;font-size:10px}.model-current-production-item span{display:block;margin-top:4px;color:var(--muted);font-size:8.5px;line-height:1.5}
     .model-stability-list{display:grid;gap:10px}
     .model-stability-row{padding:15px;border:1px solid rgba(255,255,255,.065);border-radius:15px;background:rgba(255,255,255,.018)}
     .model-stability-row-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.model-stability-row-head b{display:block;overflow-wrap:anywhere;font-size:12px}
@@ -801,12 +806,19 @@
     .model-stability-metric small{display:block;color:var(--muted);font-size:8px}.model-stability-metric strong{display:block;margin-top:4px;font-size:12px}
     .model-stability-track{height:7px;margin-top:11px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.055)}.model-stability-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#b8ff3f)}
     .model-stability-note{margin-top:8px;color:var(--muted);font-size:9px;line-height:1.55}
+    .model-stability-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.055)}
+    .model-stability-actions small{color:var(--muted);font-size:9px;line-height:1.45}
+    .model-stability-current{flex:0 0 auto;padding:8px 11px;border:1px solid var(--line-strong);border-radius:11px;color:var(--green);font-size:9px;font-weight:950;background:rgba(55,244,164,.055)}
+    .model-stability-unavailable{flex:0 0 auto;padding:8px 11px;border:1px solid rgba(255,255,255,.065);border-radius:11px;color:var(--muted);font-size:9px;font-weight:850;background:rgba(255,255,255,.02)}
+    .model-stability-rollback{flex:0 0 auto;min-width:168px}
     .model-publication-continuity{margin-top:13px;padding:13px;border:1px solid rgba(55,244,164,.2);border-radius:13px;color:#bdd0ce;font-size:10px;line-height:1.6;background:rgba(55,244,164,.035)}.model-publication-continuity b{color:var(--green)}
     @media(max-width:760px){
       .model-stability-head{flex-direction:column}.model-cumulative-pill{width:100%;text-align:center}
       .model-stability-leaders{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .model-current-production-head{flex-direction:column}.model-current-production-head span{text-align:left}.model-current-production-grid{grid-template-columns:1fr}
       .model-stability-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
       .model-stability-row-head{flex-direction:column}.model-stability-badges{justify-content:flex-start}
+      .model-stability-actions{align-items:stretch;flex-direction:column}.model-stability-current,.model-stability-unavailable,.model-stability-rollback{width:100%;text-align:center}
     }
   </style>
 
@@ -1563,10 +1575,11 @@
         </div>
         <section class="card model-stability-board">
           <div class="model-stability-head">
-            <div><h2>模型累計與穩定度排名</h2><p>優先依「版本歷史與一鍵回滾」中的校準版本統計；比較累計場次、命中率、90% 保守勝率下限、每 20 筆波動、連敗與最大回撤，不再讓少量樣本的短期高勝率誤導選版。</p></div>
+            <div><h2>模型累計、穩定度與一鍵回滾</h2><p>優先依校準版本統計；比較累計場次、命中率、90% 保守勝率下限、每 20 筆波動、連敗與最大回撤。每張歷史版本卡可直接一鍵回滾，確認後才會切換 Production。</p></div>
             <span class="model-cumulative-pill" id="modelCumulativeSummary">累計載入中</span>
           </div>
           <div class="model-stability-leaders" id="modelStabilityLeaders"><div class="settlement-empty">尚未載入穩定度排名。</div></div>
+          <div class="model-current-production" id="modelCurrentProduction"><div class="settlement-empty">正在確認目前 Production 版本。</div></div>
           <div class="model-stability-list" id="modelVersionScorecards"><div class="settlement-empty">尚未載入模型累計績效。</div></div>
           <div class="model-publication-continuity" id="modelPublicationContinuity"><b>發布不中斷規則</b><br>正在確認 NPB／KBO／CPBL 模型方向發布狀態。</div>
         </section>
@@ -4538,6 +4551,21 @@
     function renderModelVersionStability(payload={}){
       const calibrationScorecards=payload.calibration_version_scorecards||{},coreScorecards=payload.version_scorecards||{};
       const scorecards=(calibrationScorecards.items||[]).length?calibrationScorecards:coreScorecards,items=scorecards.items||[],leaders=scorecards.leaders||{},cumulative=payload.cumulative_summary||{};
+      const selectedMarket=document.getElementById("modelMarket")?.value||"all";
+      const activeProfiles=(state.modelLifecycle?.production_profiles||[]).filter(item=>selectedMarket==="all"||String(item.market||"all").toLowerCase()===selectedMarket);
+      const itemByProfileId=new Map(items.filter(item=>item.profile_id).map(item=>[String(item.profile_id),item]));
+      const itemByVersion=new Map(items.map(item=>[String(item.model_version||""),item]));
+      const activeContexts=activeProfiles.map(profile=>{
+        const own=itemByProfileId.get(String(profile.id||""));
+        const rollbackReason=String(profile.promotion_reason||"");
+        const rollbackSource=rollbackReason.startsWith("rollback_from:")?rollbackReason.slice("rollback_from:".length):"";
+        const inherited=!own&&rollbackSource?itemByVersion.get(rollbackSource):null;
+        return {profile,performance:own||inherited||null,inherited:Boolean(inherited)};
+      });
+      const activeByScope=new Map(activeContexts.map(context=>[
+        `${String(context.profile.league||"GLOBAL").toUpperCase()}:${String(context.profile.market||"all").toLowerCase()}`,
+        context,
+      ]));
       const cumulativePill=document.getElementById("modelCumulativeSummary");
       if(cumulativePill)cumulativePill.textContent=`累計 ${Number(cumulative.decisions||0)} 筆有效決策 · ${Number(cumulative.won||0)} 中 ${Number(cumulative.lost||0)} 未中`;
       const leaderBox=document.getElementById("modelStabilityLeaders");
@@ -4550,16 +4578,42 @@
         ];
         leaderBox.innerHTML=leaderItems.map(([label,version])=>`<div class="model-stability-leader"><small>${escapeHtml(label)}</small><b>${escapeHtml(version||"樣本尚未達標")}</b></div>`).join("");
       }
+      const currentBox=document.getElementById("modelCurrentProduction");
+      if(currentBox){
+        const currentRows=activeContexts.map(context=>{
+          const profile=context.profile||{},performance=context.performance;
+          const metrics=performance
+            ?`累計 ${Number(performance.decisions||0)} 筆 · 命中 ${modelMetricValue(performance.hit_rate,"%",1)} · 穩定度 ${modelMetricValue(performance.stability_score,"",1)}${context.inherited?" · 回滾來源歷史績效":""}`
+            :`尚未累積正式推薦績效 · 校準樣本 ${Number(profile.sample||0)}`;
+          return `<div class="model-current-production-item"><b>${escapeHtml(profile.version||"Production")}</b><span>${escapeHtml(modelScopeLabel(profile.league,profile.market))}<br>${escapeHtml(metrics)}</span></div>`;
+        }).join("");
+        currentBox.innerHTML=`<div class="model-current-production-head"><b>目前正在使用的 Production</b><span>回滾前先與下方目標版本比較；目前版本較好時請不要切換。</span></div><div class="model-current-production-grid">${currentRows||'<div class="model-current-production-item"><b>目前使用基準模型</b><span>尚未部署校準版本；下方歷史卡片僅供比較。</span></div>'}</div>`;
+      }
       const list=document.getElementById("modelVersionScorecards");
       if(list)list.innerHTML=items.length?items.map(item=>{
-        const badges=(item.badges||[]).map(label=>`<span class="model-stability-badge">${escapeHtml(label)}</span>`).join("");
+        const profileId=String(item.profile_id||"");
+        const version=String(item.model_version||"unknown");
+        const scopeKey=`${String(item.profile_league||"GLOBAL").toUpperCase()}:${String(item.profile_market||"all").toLowerCase()}`;
+        const current=activeByScope.get(scopeKey);
+        const active=Boolean(profileId&&String(current?.profile?.id||"")===profileId)||String(item.profile_status||"").toLowerCase()==="active";
+        const currentPerformance=current?.performance||null;
+        const currentVersion=String(current?.profile?.version||"基準模型");
+        const currentMetrics=currentPerformance
+          ?`目前：${currentVersion} · 累計 ${Number(currentPerformance.decisions||0)} 筆 · 命中 ${modelMetricValue(currentPerformance.hit_rate,"%",1)} · 穩定度 ${modelMetricValue(currentPerformance.stability_score,"",1)}`
+          :`目前：${currentVersion} · 尚未累積可比較的正式績效`;
+        const badges=[...(item.badges||[]),...(active?["目前 Production"]:[])].map(label=>`<span class="model-stability-badge">${escapeHtml(label)}</span>`).join("");
         const score=Math.max(0,Math.min(100,Number(item.stability_score||0)));
         const profit=item.profit_units==null?"—":formatUnits(item.profit_units);
         const drawdown=item.max_drawdown_units==null?"—":formatUnits(-Math.abs(Number(item.max_drawdown_units||0)));
         const dates=[item.first_recommendation_date,item.last_recommendation_date].filter(Boolean).join(" ～ ");
         const scope=item.profile_id?modelScopeLabel(item.profile_league,item.profile_market):"未套用校準版本";
+        const action=active
+          ?'<span class="model-stability-current">目前正式使用中</span>'
+          :profileId
+            ?`<button type="button" class="btn primary small model-stability-rollback" data-model-rollback data-profile-id="${escapeHtml(profileId)}" data-model-version="${escapeHtml(version)}" data-model-scope="${escapeHtml(scope)}" data-model-decisions="${Number(item.decisions||0)}" data-model-hit-rate="${item.hit_rate==null?"":escapeHtml(String(item.hit_rate))}" data-model-stability="${item.stability_score==null?"":escapeHtml(String(item.stability_score))}" data-current-version="${escapeHtml(currentVersion)}" data-current-decisions="${currentPerformance?Number(currentPerformance.decisions||0):""}" data-current-hit-rate="${currentPerformance?.hit_rate==null?"":escapeHtml(String(currentPerformance.hit_rate))}" data-current-stability="${currentPerformance?.stability_score==null?"":escapeHtml(String(currentPerformance.stability_score))}" data-target-sample-status="${escapeHtml(String(item.sample_status||""))}">一鍵回滾到此版本</button>`
+            :'<span class="model-stability-unavailable">基準版本無回滾檔案</span>';
         return `<article class="model-stability-row">
-          <div class="model-stability-row-head"><div><b>${escapeHtml(item.model_version||"unknown")}</b><div class="model-stability-note">${escapeHtml(scope)} · ${escapeHtml(item.stability_label||"持續觀察")} · ${escapeHtml(dates||"尚無日期")}</div></div><div class="model-stability-badges">${badges||`<span class="model-stability-badge">${escapeHtml(item.sample_status==="insufficient"?"樣本不足":"持續追蹤")}</span>`}</div></div>
+          <div class="model-stability-row-head"><div><b>${escapeHtml(version)}</b><div class="model-stability-note">${escapeHtml(scope)} · ${escapeHtml(item.stability_label||"持續觀察")} · ${escapeHtml(dates||"尚無日期")}</div></div><div class="model-stability-badges">${badges||`<span class="model-stability-badge">${escapeHtml(item.sample_status==="insufficient"?"樣本不足":"持續追蹤")}</span>`}</div></div>
           <div class="model-stability-metrics">
             <div class="model-stability-metric"><small>累計有效</small><strong>${Number(item.decisions||0)} 筆</strong></div>
             <div class="model-stability-metric"><small>命中率</small><strong>${modelMetricValue(item.hit_rate,"%",1)}</strong></div>
@@ -4570,6 +4624,7 @@
           </div>
           <div class="model-stability-track"><div class="model-stability-fill" style="width:${score}%"></div></div>
           <div class="model-stability-note">最近 20 筆 ${modelMetricValue(item.recent_20_hit_rate,"%",1)} · 每 20 筆波動 ${modelMetricValue(item.hit_rate_volatility,"",2)} · 等待結算 ${Number(item.pending||0)} 筆</div>
+          <div class="model-stability-actions"><small>${active?"這個聯盟／玩法目前使用此校準版本。":`${escapeHtml(currentMetrics)}<br>回滾只影響後續新分析；歷史推薦、結算與會員紀錄不會改寫。`}</small>${action}</div>
         </article>`;
       }).join(""):'<div class="settlement-empty">正式推薦尚未累積到可比較的模型版本快照。</div>';
       const continuity=document.getElementById("modelPublicationContinuity"),policy=payload.publication_continuity||{};
@@ -4658,6 +4713,7 @@
         const snapshots=results[1].status==="fulfilled"?results[1].value:{items:[]};
         const lifecycle=results[2].status==="fulfilled"?results[2].value:null;
         if(!performance){throw results[0].reason||new Error("模型績效載入失敗")}
+        if(lifecycle)state.modelLifecycle=lifecycle;
         renderModelPerformance(performance,snapshots);
         if(lifecycle)renderModelLifecycle(lifecycle);
         else{
@@ -4703,13 +4759,34 @@
     }
     async function rollbackModelVersion(button){
       const profileId=button?.dataset.profileId;if(!profileId)return;
-      if(!window.confirm("確定回滾到這個歷史模型版本？\n\n系統會建立新的稽核版本，已發布推薦不會被改寫。"))return;
-      button.disabled=true;
+      const version=button?.dataset.modelVersion||"這個歷史模型版本";
+      const scope=button?.dataset.modelScope||"指定聯盟／玩法";
+      const decisions=Number(button?.dataset.modelDecisions||0);
+      const hitRate=Number(button?.dataset.modelHitRate);
+      const stability=Number(button?.dataset.modelStability);
+      const targetMetrics=[
+        `累計有效：${decisions} 筆`,
+        button?.dataset.modelHitRate!==""&&Number.isFinite(hitRate)?`命中率：${hitRate.toFixed(1)}%`:null,
+        button?.dataset.modelStability!==""&&Number.isFinite(stability)?`穩定度：${stability.toFixed(1)}`:null,
+      ].filter(Boolean).join("｜");
+      const currentVersion=button?.dataset.currentVersion||"基準模型";
+      const currentDecisions=Number(button?.dataset.currentDecisions);
+      const currentHitRate=Number(button?.dataset.currentHitRate);
+      const currentStability=Number(button?.dataset.currentStability);
+      const hasCurrentMetrics=button?.dataset.currentDecisions!=="";
+      const currentMetrics=hasCurrentMetrics?[
+        `累計有效：${currentDecisions} 筆`,
+        Number.isFinite(currentHitRate)?`命中率：${currentHitRate.toFixed(1)}%`:null,
+        Number.isFinite(currentStability)?`穩定度：${currentStability.toFixed(1)}`:null,
+      ].filter(Boolean).join("｜"):"尚未累積可比較的正式績效";
+      const sampleWarning=button?.dataset.targetSampleStatus==="insufficient"?"\n\n注意：目標版本少於 30 筆，仍屬樣本不足。":"";
+      if(!window.confirm(`請先比較目前版與目標版：\n\n目前 Production\n「${currentVersion}」\n${currentMetrics}\n\n準備回滾至\n「${version}」\n${scope}\n${targetMetrics}${sampleWarning}\n\n確定切換嗎？只影響後續新分析；已發布推薦與會員紀錄不會被改寫。`))return;
+      const originalText=button.textContent;button.disabled=true;button.textContent="回滾中…";
       try{
         const payload=await billingRequest("/admin/model/rollback",{method:"POST",body:{profile_id:profileId,confirm:true},timeout:60000});
         showToast(payload.message||"模型回滾完成");state.modelPerformance=null;state.modelSnapshots=null;state.modelLifecycle=null;await loadModelPerformance(true);
       }catch(error){showToast(error.message||"模型回滾失敗")}
-      finally{button.disabled=false}
+      finally{if(button.isConnected){button.disabled=false;button.textContent=originalText}}
     }
     async function runModelBackfill(){
       if(!isAdminMember())return;
@@ -5115,6 +5192,7 @@
     document.getElementById("modelRunOptimization")?.addEventListener("click",runModelOptimization);
     document.getElementById("modelChallengerList")?.addEventListener("click",event=>{const button=event.target.closest("[data-model-deploy]");if(button)deployModelChallenger(button)});
     document.getElementById("modelVersionHistory")?.addEventListener("click",event=>{const button=event.target.closest("[data-model-rollback]");if(button)rollbackModelVersion(button)});
+    document.getElementById("modelVersionScorecards")?.addEventListener("click",event=>{const button=event.target.closest("[data-model-rollback]");if(button)rollbackModelVersion(button)});
     document.getElementById("modelBackfill")?.addEventListener("click",runModelBackfill);
     document.getElementById("modelRange")?.addEventListener("change",()=>{state.modelPerformance=null;loadModelPerformance(true)});
     document.getElementById("modelMarket")?.addEventListener("change",()=>{state.modelPerformance=null;loadModelPerformance(true)});
@@ -5905,7 +5983,7 @@
         if(target)target.textContent="今日資料載入中";
       });
       const results=await Promise.allSettled(leagues.map(code=>fetchJsonWithTimeout(
-        `${API_BASE}/games?league=${encodeURIComponent(code)}&date=${encodeURIComponent(date)}&build=18.18.0&_=${Date.now()}`,
+        `${API_BASE}/games?league=${encodeURIComponent(code)}&date=${encodeURIComponent(date)}&build=18.18.1&_=${Date.now()}`,
         code==="MLB"?15000:30000
       )));
       if(requestId!==homeLeagueSummaryRequest)return;
