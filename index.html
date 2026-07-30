@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.9 · Asian Direction Consistency · Backend V22.4.9 -->
-  <meta name="diamondmind-version" content="18.17.9-founder">
+  <!-- DiamondMind Founder Console V18.18.0 · Model Stability Center · Backend V22.5.0 -->
+  <meta name="diamondmind-version" content="18.18.0-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.4.9">
+  <meta name="diamondmind-backend-target" content="22.5.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -784,6 +784,32 @@
 
   </style>
 
+  <style id="diamondmind-model-stability-style">
+    .model-stability-board{padding:20px;margin-bottom:18px;border-color:rgba(55,244,164,.28);background:radial-gradient(circle at 100% 0,rgba(55,244,164,.09),transparent 42%),rgba(255,255,255,.018)}
+    .model-stability-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}
+    .model-stability-head h2{margin:0;font-size:22px}.model-stability-head p{max-width:760px;margin:6px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
+    .model-cumulative-pill{flex:0 0 auto;padding:8px 11px;border:1px solid var(--line-strong);border-radius:999px;color:var(--green);font-size:10px;font-weight:950}
+    .model-stability-leaders{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:13px}
+    .model-stability-leader{min-width:0;padding:13px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(0,0,0,.18)}
+    .model-stability-leader small{display:block;color:var(--muted);font-size:9px}.model-stability-leader b{display:block;overflow:hidden;margin-top:6px;color:#edf7f4;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+    .model-stability-list{display:grid;gap:10px}
+    .model-stability-row{padding:15px;border:1px solid rgba(255,255,255,.065);border-radius:15px;background:rgba(255,255,255,.018)}
+    .model-stability-row-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.model-stability-row-head b{display:block;overflow-wrap:anywhere;font-size:12px}
+    .model-stability-badges{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px}.model-stability-badge{padding:5px 7px;border:1px solid rgba(55,244,164,.28);border-radius:999px;color:var(--green);font-size:8px;font-weight:950}
+    .model-stability-metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:11px}
+    .model-stability-metric{padding:9px;border:1px solid rgba(255,255,255,.045);border-radius:11px;background:rgba(0,0,0,.14)}
+    .model-stability-metric small{display:block;color:var(--muted);font-size:8px}.model-stability-metric strong{display:block;margin-top:4px;font-size:12px}
+    .model-stability-track{height:7px;margin-top:11px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.055)}.model-stability-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#b8ff3f)}
+    .model-stability-note{margin-top:8px;color:var(--muted);font-size:9px;line-height:1.55}
+    .model-publication-continuity{margin-top:13px;padding:13px;border:1px solid rgba(55,244,164,.2);border-radius:13px;color:#bdd0ce;font-size:10px;line-height:1.6;background:rgba(55,244,164,.035)}.model-publication-continuity b{color:var(--green)}
+    @media(max-width:760px){
+      .model-stability-head{flex-direction:column}.model-cumulative-pill{width:100%;text-align:center}
+      .model-stability-leaders{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .model-stability-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .model-stability-row-head{flex-direction:column}.model-stability-badges{justify-content:flex-start}
+    }
+  </style>
+
   <style>
     @media(max-width:760px){
       .announcement-home-head{padding:18px}.announcement-item{grid-template-columns:1fr;padding:17px 18px}.announcement-level{width:max-content}.announcement-item .btn{width:100%}.announcement-modal h2{font-size:25px}.announcement-modal-actions{flex-direction:column}.announcement-modal-actions .btn{width:100%}.announcement-admin-layout{grid-template-columns:1fr}.announcement-form-grid{grid-template-columns:1fr}.announcement-form-grid .full,.announcement-checks{grid-column:1}.announcement-checks{grid-template-columns:1fr}.announcement-form-card,.announcement-admin-list-card{padding:18px}#adminAnnouncementsPage .page-space{padding-bottom:210px}
@@ -1204,7 +1230,7 @@
           <section class="card founder-console smart-publish-console" data-auth-admin hidden aria-labelledby="smartPublishTitle">
             <div class="founder-console-head">
               <div><div class="kicker">SMART PUBLISHING CENTER</div><h2 id="smartPublishTitle">智慧發布中心</h2><p>AI 只提供建議；亞洲聯盟先發布模型獨贏，真實盤口晚到時再追加合格玩法，不會改寫原推薦。</p></div>
-              <span class="micro-pill">V22.4.9</span>
+              <span class="micro-pill">V22.5.0</span>
             </div>
             <div class="smart-publish-toolbar">
               <input type="date" id="smartPublishDate" aria-label="智慧發布日期">
@@ -1535,6 +1561,15 @@
           <button type="button" class="btn primary" id="modelExportPerformance">匯出績效 CSV</button>
           <div class="model-calibration-note" id="modelSyncStatus" style="grid-column:1/-1;margin-top:0">模型績效只讀取已完成的快照；歷史同步會在背景執行，不會再卡住整個頁面。</div>
         </div>
+        <section class="card model-stability-board">
+          <div class="model-stability-head">
+            <div><h2>模型累計與穩定度排名</h2><p>優先依「版本歷史與一鍵回滾」中的校準版本統計；比較累計場次、命中率、90% 保守勝率下限、每 20 筆波動、連敗與最大回撤，不再讓少量樣本的短期高勝率誤導選版。</p></div>
+            <span class="model-cumulative-pill" id="modelCumulativeSummary">累計載入中</span>
+          </div>
+          <div class="model-stability-leaders" id="modelStabilityLeaders"><div class="settlement-empty">尚未載入穩定度排名。</div></div>
+          <div class="model-stability-list" id="modelVersionScorecards"><div class="settlement-empty">尚未載入模型累計績效。</div></div>
+          <div class="model-publication-continuity" id="modelPublicationContinuity"><b>發布不中斷規則</b><br>正在確認 NPB／KBO／CPBL 模型方向發布狀態。</div>
+        </section>
         <div class="model-summary-grid">
           <div class="card model-summary-card"><small>全部快照</small><b id="modelTotal">—</b></div>
           <div class="card model-summary-card"><small>有效決策</small><b id="modelDecisions">—</b></div>
@@ -4496,6 +4531,50 @@
       }).join(""):'<div class="settlement-empty">尚無模型版本歷史。</div>';
       renderWeightLifecycle(payload);
     }
+    function modelMetricValue(value,suffix="",digits=1){
+      const number=Number(value);
+      return value===null||value===undefined||!Number.isFinite(number)?"—":`${number.toFixed(digits)}${suffix}`;
+    }
+    function renderModelVersionStability(payload={}){
+      const calibrationScorecards=payload.calibration_version_scorecards||{},coreScorecards=payload.version_scorecards||{};
+      const scorecards=(calibrationScorecards.items||[]).length?calibrationScorecards:coreScorecards,items=scorecards.items||[],leaders=scorecards.leaders||{},cumulative=payload.cumulative_summary||{};
+      const cumulativePill=document.getElementById("modelCumulativeSummary");
+      if(cumulativePill)cumulativePill.textContent=`累計 ${Number(cumulative.decisions||0)} 筆有效決策 · ${Number(cumulative.won||0)} 中 ${Number(cumulative.lost||0)} 未中`;
+      const leaderBox=document.getElementById("modelStabilityLeaders");
+      if(leaderBox){
+        const leaderItems=[
+          ["綜合建議",leaders.recommended],
+          ["勝率最穩",leaders.most_stable],
+          ["保守勝率最高",leaders.best_hit_rate],
+          ["效益最高",leaders.best_value],
+        ];
+        leaderBox.innerHTML=leaderItems.map(([label,version])=>`<div class="model-stability-leader"><small>${escapeHtml(label)}</small><b>${escapeHtml(version||"樣本尚未達標")}</b></div>`).join("");
+      }
+      const list=document.getElementById("modelVersionScorecards");
+      if(list)list.innerHTML=items.length?items.map(item=>{
+        const badges=(item.badges||[]).map(label=>`<span class="model-stability-badge">${escapeHtml(label)}</span>`).join("");
+        const score=Math.max(0,Math.min(100,Number(item.stability_score||0)));
+        const profit=item.profit_units==null?"—":formatUnits(item.profit_units);
+        const drawdown=item.max_drawdown_units==null?"—":formatUnits(-Math.abs(Number(item.max_drawdown_units||0)));
+        const dates=[item.first_recommendation_date,item.last_recommendation_date].filter(Boolean).join(" ～ ");
+        const scope=item.profile_id?modelScopeLabel(item.profile_league,item.profile_market):"未套用校準版本";
+        return `<article class="model-stability-row">
+          <div class="model-stability-row-head"><div><b>${escapeHtml(item.model_version||"unknown")}</b><div class="model-stability-note">${escapeHtml(scope)} · ${escapeHtml(item.stability_label||"持續觀察")} · ${escapeHtml(dates||"尚無日期")}</div></div><div class="model-stability-badges">${badges||`<span class="model-stability-badge">${escapeHtml(item.sample_status==="insufficient"?"樣本不足":"持續追蹤")}</span>`}</div></div>
+          <div class="model-stability-metrics">
+            <div class="model-stability-metric"><small>累計有效</small><strong>${Number(item.decisions||0)} 筆</strong></div>
+            <div class="model-stability-metric"><small>命中率</small><strong>${modelMetricValue(item.hit_rate,"%",1)}</strong></div>
+            <div class="model-stability-metric"><small>90% 保守下限</small><strong>${modelMetricValue(item.conservative_hit_rate,"%",1)}</strong></div>
+            <div class="model-stability-metric"><small>穩定度</small><strong>${modelMetricValue(item.stability_score,"",1)}</strong></div>
+            <div class="model-stability-metric"><small>累計盈虧／ROI</small><strong class="${profitTone(item.profit_units)}">${escapeHtml(profit)} · ${modelMetricValue(item.roi_percent,"%",2)}</strong></div>
+            <div class="model-stability-metric"><small>最大回撤／最長連敗</small><strong>${escapeHtml(drawdown)} · ${Number(item.max_losing_streak||0)} 場</strong></div>
+          </div>
+          <div class="model-stability-track"><div class="model-stability-fill" style="width:${score}%"></div></div>
+          <div class="model-stability-note">最近 20 筆 ${modelMetricValue(item.recent_20_hit_rate,"%",1)} · 每 20 筆波動 ${modelMetricValue(item.hit_rate_volatility,"",2)} · 等待結算 ${Number(item.pending||0)} 筆</div>
+        </article>`;
+      }).join(""):'<div class="settlement-empty">正式推薦尚未累積到可比較的模型版本快照。</div>';
+      const continuity=document.getElementById("modelPublicationContinuity"),policy=payload.publication_continuity||{};
+      if(continuity)continuity.innerHTML=`<b>發布不中斷規則：${policy.performance_ranking_blocks_publication===false?"已啟用":"確認中"}</b><br>${escapeHtml(policy.message||"模型排名只作選版建議，不會直接修改正式推薦。")}`;
+    }
     function modelBreakdownRows(items,labels){
       if(!items?.length)return '<div class="settlement-empty">目前尚無已發布快照。</div>';
       return items.map(item=>`<div class="model-breakdown-row"><div><b>${escapeHtml(labels[item.key]||item.key)}</b><span>命中 ${Number(item.won||0)} · 未中 ${Number(item.lost||0)} · 盈虧 ${escapeHtml(formatUnits(item.profit_units))}</span></div><span>${item.roi_percent==null?"ROI —":`ROI ${Number(item.roi_percent).toFixed(2)}%`}</span><strong>${escapeHtml(modelRate(item.hit_rate))}</strong></div>`).join("");
@@ -4558,6 +4637,7 @@
       document.getElementById("modelConfidenceBreakdown").innerHTML=modelBreakdownRows(payload?.by_confidence||[],modelConfidenceLabels);
       document.getElementById("modelPublicationBreakdown").innerHTML=modelBreakdownRows(payload?.by_publication_mode||[],modelPublicationLabels);
       document.getElementById("modelVersionBreakdown").innerHTML=modelBreakdownRows(payload?.by_model_version||[],{});
+      renderModelVersionStability(payload||{});
       renderModelWeights(payload?.calibration||{});
       renderModelSnapshots(snapshots?.items||[]);
     }
@@ -5825,7 +5905,7 @@
         if(target)target.textContent="今日資料載入中";
       });
       const results=await Promise.allSettled(leagues.map(code=>fetchJsonWithTimeout(
-        `${API_BASE}/games?league=${encodeURIComponent(code)}&date=${encodeURIComponent(date)}&build=18.14.2&_=${Date.now()}`,
+        `${API_BASE}/games?league=${encodeURIComponent(code)}&date=${encodeURIComponent(date)}&build=18.18.0&_=${Date.now()}`,
         code==="MLB"?15000:30000
       )));
       if(requestId!==homeLeagueSummaryRequest)return;

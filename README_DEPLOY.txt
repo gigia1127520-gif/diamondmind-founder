@@ -1,4 +1,4 @@
-DiamondMind 創辦人後台 V18.17.9
+DiamondMind 創辦人後台 V18.18.0
 ==============================
 
 建議儲存庫
@@ -20,6 +20,10 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 - 會員與交易管理
 - 公告管理
 - 模型績效
+- 模型版本累計場次、命中率、90% 保守勝率下限與穩定度排名
+- 顯示綜合建議、勝率最穩、保守勝率最高、效益最高版本
+- 顯示最近 20 筆、每 20 筆波動、最長連敗與最大回撤
+- 模型排名只提供選版建議，不會阻擋 NPB／KBO／CPBL 獨贏發布
 - 系統狀態
 - 會員臨時密碼重置與強制改密碼
 - NPB／KBO／CPBL 真實盤口主備援狀態
@@ -59,10 +63,10 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 
 後端
 ----
-使用 DiamondMind Backend V22.4.9；若尚未執行過，須先在 Supabase SQL Editor 執行
+使用 DiamondMind Backend V22.5.0；若尚未執行過，須先在 Supabase SQL Editor 執行
 DIAMONDMIND_V22.4.3_SUPABASE_盤口快照.sql.txt，讓最後真實盤口與
 免費 API 冷卻狀態可跨 Render 重啟保留。無需新增 Render 環境變數；
 既有 ODDS_API_IO_KEY 會同時供 MLB、NPB、KBO、CPBL 使用。
-V22.4.9 沒有新增資料表；已執行過 V22.4.3 SQL 就不用重跑。
+V22.5.0 沒有新增資料表；已執行過 V22.4.3 SQL 就不用重跑。
 兩個 GitHub Pages 儲存庫都位於同一個 github.io origin，
 現有後端 CORS 設定已允許該 origin。
