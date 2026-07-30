@@ -1,4 +1,4 @@
-DiamondMind 創辦人後台 V18.17.7
+DiamondMind 創辦人後台 V18.17.9
 ==============================
 
 建議儲存庫
@@ -31,6 +31,10 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 - 有有效盤口時只作參考；沒有有效盤口時仍可建立純模型方向獨贏
 - 純模型模式不顯示盤口、賠率、市場機率或市場優勢，也不建立讓分、大小分與串關
 - 讓分、大小分與串關仍須有效真實盤口及原本安全驗證
+- 亞洲聯盟 Pro 改為兩階段發布：先鎖定模型方向獨贏，再補充晚到真實盤口玩法
+- 盤口補充只會追加讓分、大小分與串關，不會改寫原獨贏或既有推薦
+- 系統持續檢查到全日最早一場開打前 30 分鐘，之後整批最終鎖定
+- 每次新增盤口玩法時會另排入 LINE「盤口推薦已更新」通知
 - 修正創辦人登入完成前的訪客紀錄被誤快取，造成會員端有 Pro 紀錄但後台顯示 0 筆
 - 每次進入「紀錄」頁都會以創辦人權限重新同步正式 Pro 紀錄
 
@@ -55,10 +59,10 @@ https://gigia1127520-gif.github.io/diamondmind-founder/
 
 後端
 ----
-使用 DiamondMind Backend V22.4.7；若尚未執行過，須先在 Supabase SQL Editor 執行
+使用 DiamondMind Backend V22.4.9；若尚未執行過，須先在 Supabase SQL Editor 執行
 DIAMONDMIND_V22.4.3_SUPABASE_盤口快照.sql.txt，讓最後真實盤口與
 免費 API 冷卻狀態可跨 Render 重啟保留。無需新增 Render 環境變數；
 既有 ODDS_API_IO_KEY 會同時供 MLB、NPB、KBO、CPBL 使用。
-V22.4.7 沒有新增資料表；已執行過 V22.4.3 SQL 就不用重跑。
+V22.4.9 沒有新增資料表；已執行過 V22.4.3 SQL 就不用重跑。
 兩個 GitHub Pages 儲存庫都位於同一個 github.io origin，
 現有後端 CORS 設定已允許該 origin。

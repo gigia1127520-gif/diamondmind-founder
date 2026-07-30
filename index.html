@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <!-- DiamondMind Founder Console V18.17.7 · Asian Model-Direction Moneyline · Backend V22.4.7 -->
-  <meta name="diamondmind-version" content="18.17.7-founder">
+  <!-- DiamondMind Founder Console V18.17.9 · Asian Direction Consistency · Backend V22.4.9 -->
+  <meta name="diamondmind-version" content="18.17.9-founder">
   <meta name="diamondmind-site" content="founder">
-  <meta name="diamondmind-backend-target" content="22.4.7">
+  <meta name="diamondmind-backend-target" content="22.4.9">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1203,8 +1203,8 @@
 
           <section class="card founder-console smart-publish-console" data-auth-admin hidden aria-labelledby="smartPublishTitle">
             <div class="founder-console-head">
-              <div><div class="kicker">SMART PUBLISHING CENTER</div><h2 id="smartPublishTitle">智慧發布中心</h2><p>AI 只提供建議；Free 與 Pro 使用不同資料通道，必須分開載入、分開確認、分開發布。</p></div>
-              <span class="micro-pill">V22.3</span>
+              <div><div class="kicker">SMART PUBLISHING CENTER</div><h2 id="smartPublishTitle">智慧發布中心</h2><p>AI 只提供建議；亞洲聯盟先發布模型獨贏，真實盤口晚到時再追加合格玩法，不會改寫原推薦。</p></div>
+              <span class="micro-pill">V22.4.9</span>
             </div>
             <div class="smart-publish-toolbar">
               <input type="date" id="smartPublishDate" aria-label="智慧發布日期">
@@ -1221,7 +1221,7 @@
               </article>
               <article class="smart-channel-card">
                 <div class="smart-channel-head"><b>PRO 會員通道</b><span id="smartProState" class="waiting">等待檢查</span></div>
-                <p id="smartProAdvice">NPB／KBO／CPBL 單場獨贏採模型方向；盤口只作參考，讓分、大小分與串關仍須有效盤口。</p>
+                <p id="smartProAdvice">NPB／KBO／CPBL 先鎖定模型方向獨贏；真實盤口晚到後，自動追加通過條件的讓分、大小分與串關。</p>
                 <small>資料庫：prediction_packages · 可見範圍：Pro／創辦人</small>
                 <button type="button" class="btn ghost small" id="smartLoadPro">載入 Pro AI 建議</button>
               </article>
@@ -1245,7 +1245,7 @@
 
           <section class="card founder-console" data-auth-admin hidden aria-labelledby="founderMarketTitle">
             <div class="founder-console-head">
-              <div><div class="kicker">PRO PUBLISH CONTROL</div><h2 id="founderMarketTitle">付費會員推薦管理</h2><p>NPB／KBO／CPBL 單場獨贏採模型方向，不以 52% 或市場優勢阻擋；讓分、大小分與串關仍須有效盤口。</p></div>
+              <div><div class="kicker">PRO PUBLISH CONTROL</div><h2 id="founderMarketTitle">付費會員推薦管理</h2><p>NPB／KBO／CPBL 單場獨贏先依模型方向發布；晚到真實盤口通過原安全門檻後，只追加讓分、大小分與串關，最早一場開打前 30 分鐘鎖定。</p></div>
               <span class="micro-pill">僅創辦人可見</span>
             </div>
             <div class="founder-toolbar">
@@ -1263,7 +1263,7 @@
           </section>
 
           <section class="access-levels" aria-labelledby="accessLevelTitle">
-            <div class="access-level-head"><div><h2 id="accessLevelTitle">Pro 會員精選</h2><p>Pro 會員只顯示已正式發布並鎖定的推薦，不會混入未發布候選。</p></div><button type="button" class="btn pro small" id="predictionUpgradeButton" data-page="membershipPage">升級 DiamondMind Pro</button></div>
+            <div class="access-level-head"><div><h2 id="accessLevelTitle">Pro 會員精選</h2><p>Pro 只顯示正式推薦；既有選擇不會更換，亞洲聯盟可在截止前追加通過條件的晚到盤口玩法。</p></div><button type="button" class="btn pro small" id="predictionUpgradeButton" data-page="membershipPage">升級 DiamondMind Pro</button></div>
             <div class="pro-access-grid">
               <article class="pro-access-card open"><div class="pro-access-top"><span class="market-tag">FREE PICK</span><span class="access-chip">已開放</span></div><h3>每日免費精選</h3><p>免費會員可查看四聯盟各自正式發布的免費獨贏精選；未達門檻不硬湊。</p></article>
               <article class="pro-access-card locked" data-pro-feature><div class="pro-access-top"><span class="market-tag pro">MONEYLINE+</span><span class="access-chip lock" data-pro-access-chip>PRO</span></div><h3>獨贏精選</h3><div class="pro-prediction-body" data-pro-body="moneylines"><p>只顯示目前所選聯盟中，已正式發布並鎖定的獨贏推薦。</p></div><span class="pro-lock-icon" data-pro-lock aria-hidden="true">◇</span></article>
@@ -1273,7 +1273,7 @@
               <article class="pro-access-card locked" data-pro-feature><div class="pro-access-top"><span class="market-tag pro">2-LEG</span><span class="access-chip lock" data-pro-access-chip>PRO</span></div><h3>二關串關</h3><div class="pro-prediction-body" data-pro-body="two_leg"><p>最多 2 組，由不同場次的合格單場推薦組成。</p></div><span class="pro-lock-icon" data-pro-lock aria-hidden="true">◇</span></article>
               <article class="pro-access-card locked" data-pro-feature><div class="pro-access-top"><span class="market-tag pro">3-LEG</span><span class="access-chip lock" data-pro-access-chip>PRO</span></div><h3>三關串關</h3><div class="pro-prediction-body" data-pro-body="three_leg"><p>最多 1 組高風險組合，清楚標示組合依據。</p></div><span class="pro-lock-icon" data-pro-lock aria-hidden="true">◇</span></article>
             </div>
-            <div class="pro-build-note" id="proPredictionNote">會員區只顯示正式發布推薦；未達門檻的候選不會出現在會員畫面。</div>
+            <div class="pro-build-note" id="proPredictionNote">會員區只顯示正式發布推薦；亞洲聯盟獨贏發布後，系統仍會監控可用真實盤口並追加合格玩法。</div>
           </section>
           </section>
 
@@ -4261,14 +4261,14 @@
       body.append(list);
     }
 
-    function renderParlayList(key,parlays,results={}){
+    function renderParlayList(key,parlays,results={},emptyText="最近一批合格的不同場次不足，不為湊關強行發布。"){
       const body=document.querySelector(`[data-pro-body="${key}"]`);
       if(!body)return;
       body.replaceChildren();
       const items=asSelectionArray(parlays);
       if(!items.length){
         const empty=document.createElement("p");
-        empty.textContent="最近一批合格的不同場次不足，不為湊關強行發布。";
+        empty.textContent=emptyText;
         body.append(empty);
         return;
       }
@@ -4371,6 +4371,17 @@
         renderLockedProPredictions();
         return;
       }
+      const batch=payload.pro_batch||{};
+      const batchLeague=String(batch.league||payload.league||state.predictionLeague||"").toUpperCase();
+      const asianSupplement=["NPB","KBO","CPBL"].includes(batchLeague);
+      const supplementOpen=asianSupplement&&Boolean(batch.market_supplement_open);
+      const supplementLocked=asianSupplement&&batch.market_supplement_status==="locked";
+      const supplementLockMinutes=Number(batch.market_supplement_lock_minutes||30);
+      const marketEmptyText=supplementOpen
+        ?`獨贏已發布；系統仍在檢查真實盤口，通過條件後會自動追加至最早一場開打前 ${supplementLockMinutes} 分鐘。`
+        :supplementLocked
+          ?"本批盤口補充窗已關閉，沒有取得通過條件的正式玩法。"
+          :"最近一批沒有正式發布這項玩法。";
       const moneylines=asSelectionArray(payload.moneylines);
       const runLines=asSelectionArray(payload.run_lines||payload.run_line);
       const totals=asSelectionArray(Array.isArray(payload.totals)?payload.totals:(payload.total||payload.totals));
@@ -4378,21 +4389,26 @@
       const threeLeg=asSelectionArray(payload.parlays?.three_leg);
       const publishedResults=payload.results||{};
       renderMarketList("moneylines",moneylines,"最近一批沒有正式發布獨贏玩法。",publishedResults);
-      renderMarketList("run_lines",runLines,"最近一批沒有正式發布讓分玩法。",publishedResults);
-      renderMarketList("totals",totals,"最近一批沒有正式發布大小分玩法。",publishedResults);
-      renderParlayList("two_leg",twoLeg,publishedResults);
-      renderParlayList("three_leg",threeLeg,publishedResults);
+      renderMarketList("run_lines",runLines,marketEmptyText,publishedResults);
+      renderMarketList("totals",totals,marketEmptyText,publishedResults);
+      renderParlayList("two_leg",twoLeg,publishedResults,marketEmptyText);
+      renderParlayList("three_leg",threeLeg,publishedResults,marketEmptyText);
       const admin=isAdminMember();
       const watchCount=admin?renderWatchlist(payload.watchlist||{}):0;
       const formalCount=moneylines.length+runLines.length+totals.length+twoLeg.length+threeLeg.length;
       const note=document.getElementById("proPredictionNote");
       if(!note)return;
-      const batch=payload.pro_batch||{};
       const release=batch.published_at?`（${publicationDateTime(batch.published_at)} 發布）`:"";
+      const latestSupplement=batch.last_market_supplement_at?`；最近補充 ${publicationDateTime(batch.last_market_supplement_at)}`:"";
+      const supplementCopy=supplementOpen
+        ?`；原獨贏已鎖定，真實盤口補充監控中，最早一場開打前 ${supplementLockMinutes} 分鐘截止${latestSupplement}`
+        :supplementLocked
+          ?`；既有推薦與盤口補充均已鎖定${latestSupplement}`
+          :"；發布後已鎖定，不需等待午夜換日";
       if(admin&&formalCount&&watchCount){
-        note.textContent=`最新批次${release}共有 ${formalCount} 項 Pro 推薦，另有 ${watchCount} 項創辦人觀察候選；觀察項目不結算、不計命中率。`;
+        note.textContent=`最新批次${release}共有 ${formalCount} 項 Pro 推薦，另有 ${watchCount} 項創辦人觀察候選；觀察項目不結算、不計命中率${supplementCopy}。`;
       }else if(formalCount){
-        note.textContent=`最新批次${release}共有 ${formalCount} 項 Pro 推薦；發布後已鎖定，不需等待午夜換日。`;
+        note.textContent=`最新批次${release}共有 ${formalCount} 項 Pro 推薦${supplementCopy}。`;
       }else if(admin&&watchCount){
         note.textContent=`目前無已正式發布的 Pro 推薦；有 ${watchCount} 項候選只供創辦人內部審核。`;
       }else{
@@ -5098,7 +5114,8 @@
       const proSuggestedCount=Object.values(recommended).reduce((sum,items)=>sum+(Array.isArray(items)?items.length:0),0);
       advice.innerHTML=`<b>${escapeHtml(code)} AI 發布建議</b><br>${escapeHtml(plan.advice||"Free 與 Pro 必須分開確認。")}`;
       smartChannelState(freeState,free.locked,free.locked?"已發布鎖定":freeSuggestion?"AI 建議已就緒":"尚未發布");
-      smartChannelState(proState,pro.locked,pro.locked?"已發布鎖定":proSuggestedCount?"AI 建議已就緒":"尚未發布");
+      const proSupplementOpen=Boolean(pro.market_supplement_open);
+      smartChannelState(proState,pro.locked,pro.locked?(proSupplementOpen?"獨贏鎖定 · 盤口監控中":"已發布鎖定"):proSuggestedCount?"AI 建議已就緒":"尚未發布");
       if(free.locked){
         const selected=free.selection||{};
         freeText.textContent=`已鎖定：${localizeMatchup(selected.matchup||"免費精選")} · ${localizePickLabel(selected.pick||"—")}。不會被自動流程覆蓋。`;
@@ -5113,7 +5130,9 @@
         freeText.textContent=`${code} Free 尚未鎖定；載入後會把最高信心且仍未開賽的有效獨贏候選排在最前面。`;
       }
       if(pro.locked){
-        proText.textContent=`已鎖定 ${Number(pro.selection_count||0)} 項 Pro 玩法；只有 Pro／創辦人帳號能由後端取得完整內容。`;
+        proText.textContent=proSupplementOpen
+          ?`已鎖定 ${Number(pro.selection_count||0)} 項 Pro 玩法；原獨贏不會更換，系統持續檢查晚到真實盤口，通過條件後自動追加至開賽前 ${Number(pro.market_supplement_lock_minutes||30)} 分鐘。`
+          :`已鎖定 ${Number(pro.selection_count||0)} 項 Pro 玩法；只有 Pro／創辦人帳號能由後端取得完整內容。`;
       }else if(proSuggestedCount){
         const proMode=proBundle?.readiness?.[code]?.analysis_mode||proBundle?.league_status?.[code]?.analysis_mode;
         const asianDirection=["NPB","KBO","CPBL"].includes(code);
@@ -5142,7 +5161,7 @@
       }
       if(proButton){
         proButton.disabled=Boolean(pro.locked);
-        proButton.textContent=pro.locked?"Pro 已鎖定":"載入 Pro AI 建議";
+        proButton.textContent=pro.locked?(proSupplementOpen?"獨贏已鎖定 · 自動監控中":"Pro 已鎖定"):"載入 Pro AI 建議";
       }
     }
 
